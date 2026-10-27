@@ -11,6 +11,7 @@ A Firebase-powered campus marketplace where students browse listings, publish it
 - Listing reports and administrator moderation
 - Firestore and Storage security rules with emulator tests
 - Installable Progressive Web App (service worker + web app manifest)
+- SSR + SEO for public pages (meta, Open Graph, JSON-LD, sitemap, robots.txt)
 
 ## Stack
 

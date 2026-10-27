@@ -20,7 +20,8 @@
         "*.local"
       ],
       "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run build"
+        "pnpm --dir \"$RESOURCE_DIR/..\" run build:web",
+        "pnpm --dir \"$RESOURCE_DIR\" run build"
       ]
     }
   ],

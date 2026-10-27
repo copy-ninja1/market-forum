@@ -13,6 +13,7 @@ import {
   signInSchema,
   signUpSchema,
 } from "@/features/auth/schemas/authSchemas";
+import { getEmailActionCodeSettings } from "@/features/auth/services/authActionService";
 import type {
   AuthUser,
   PasswordResetInput,
@@ -58,7 +59,7 @@ export async function signUp(input: SignUpInput): Promise<AuthUser> {
 
   const credential = await createUserWithEmailAndPassword(auth, parsed.email, parsed.password);
   await updateProfile(credential.user, { displayName: parsed.displayName });
-  await sendEmailVerification(credential.user);
+  await sendEmailVerification(credential.user, getEmailActionCodeSettings());
   await createUserDocument(credential.user, parsed.displayName, parsed.institution);
 
   return mapUser(credential.user);
@@ -77,7 +78,11 @@ export async function signOut(): Promise<void> {
 
 export async function resetPassword(input: PasswordResetInput): Promise<void> {
   const parsed = passwordResetSchema.parse(input);
-  await sendPasswordResetEmail(getFirebaseAuth(), parsed.email);
+  await sendPasswordResetEmail(
+    getFirebaseAuth(),
+    parsed.email,
+    getEmailActionCodeSettings(),
+  );
 }
 
 export async function getCurrentAuthUser(): Promise<AuthUser | null> {
