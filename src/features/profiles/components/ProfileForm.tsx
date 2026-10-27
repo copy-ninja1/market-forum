@@ -65,7 +65,7 @@ export function ProfileForm({ profile, isSubmitting = false, onSubmit }: Profile
   const disabled = isSubmitting || isSaving;
 
   return (
-    <form className="mx-auto max-w-xl space-y-5" onSubmit={handleSubmit} noValidate>
+    <form className="space-y-5" onSubmit={handleSubmit} noValidate>
       {successMessage ? <SuccessMessage message={successMessage} title="Saved" /> : null}
       {formError ? <FormError message={formError} /> : null}
 

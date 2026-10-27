@@ -1,4 +1,4 @@
-import { Button, Card } from "@heroui/react";
+import { Button } from "@heroui/react";
 import type { ErrorStateProps } from "@/components/ui/ui.interfaces";
 
 export function ErrorState({
@@ -9,21 +9,15 @@ export function ErrorState({
   className,
 }: ErrorStateProps) {
   return (
-    <Card
-      className={`border border-danger/25 bg-campus-paper/95 ${className ?? ""}`.trim()}
-      variant="secondary"
-    >
-      <Card.Header className="flex flex-col gap-2 text-center md:text-left">
-        <Card.Title className="font-display text-xl text-campus-ink">{title}</Card.Title>
-        <Card.Description className="text-campus-ink/80">{message}</Card.Description>
-      </Card.Header>
+    <section className={`panel px-6 py-8 ${className ?? ""}`.trim()} role="alert">
+      <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-danger">Needs attention</p>
+      <h2 className="font-display mt-2 text-3xl tracking-tight text-campus-ink">{title}</h2>
+      <p className="mt-3 max-w-xl text-sm leading-relaxed text-campus-ink/75">{message}</p>
       {onRetry ? (
-        <Card.Footer className="justify-center md:justify-start">
-          <Button variant="primary" onPress={onRetry}>
-            {retryLabel}
-          </Button>
-        </Card.Footer>
+        <Button className="mt-6" variant="primary" onPress={onRetry}>
+          {retryLabel}
+        </Button>
       ) : null}
-    </Card>
+    </section>
   );
 }

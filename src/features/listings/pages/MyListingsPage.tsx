@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { FormError } from "@/components/feedback/FormError";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { StatCard } from "@/components/ui/StatCard";
 import { editListingPath, listingDetailsPath, ROUTES } from "@/constants/route.constants";
 import { DeleteListingDialog } from "@/features/listings/components/DeleteListingDialog";
 import { ListingStatusBadge } from "@/features/listings/components/ListingStatusBadge";
@@ -23,6 +24,9 @@ export function MyListingsPage() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
+  const activeCount = listings.filter((listing) => listing.status === "active").length;
+  const soldCount = listings.filter((listing) => listing.status === "sold").length;
+
   const handleStatusChange = async (listing: Listing, status: ListingStatus) => {
     setActionError(null);
     setUpdatingId(listing.id);
@@ -37,16 +41,23 @@ export function MyListingsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
         actions={
           <Link to={ROUTES.createListing}>
             <Button variant="primary">New listing</Button>
           </Link>
         }
-        description="Manage availability, edit details, or remove posts you no longer need."
+        description="Update availability, edit details, or remove posts you no longer need."
+        eyebrow="Seller desk"
         title="My listings"
       />
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <StatCard hint="Everything you have posted" label="Total" value={isLoading ? "—" : listings.length} />
+        <StatCard hint="Visible on the public board" label="Active" value={isLoading ? "—" : activeCount} />
+        <StatCard hint="Marked sold by you" label="Sold" value={isLoading ? "—" : soldCount} />
+      </div>
 
       {actionError ? <FormError message={actionError} /> : null}
       {error ? <ErrorState message={error} onRetry={() => void reload()} /> : null}
@@ -60,60 +71,84 @@ export function MyListingsPage() {
               <Button variant="primary">Post your first listing</Button>
             </Link>
           }
-          description="When you publish items, they will show up here."
+          description="When you publish items, they will show up here with their status and price."
           title="You have no listings yet"
         />
       ) : null}
 
       {!isLoading && listings.length > 0 ? (
-        <ul className="space-y-4">
-          {listings.map((listing) => (
-            <li
-              key={listing.id}
-              className="flex flex-col gap-4 rounded-xl border border-campus-mist bg-campus-paper/90 p-4 md:flex-row md:items-center md:justify-between"
-            >
-              <div className="space-y-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link className="font-display text-lg text-campus-ink hover:text-campus-leaf" to={listingDetailsPath(listing.id)}>
-                    {listing.title}
-                  </Link>
-                  <ListingStatusBadge status={listing.status} />
-                </div>
-                <p className="text-sm text-campus-ink/70">{formatMoney(listing.price, listing.currencyCode)}</p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <label className="sr-only" htmlFor={`status-${listing.id}`}>
-                  Status for {listing.title}
-                </label>
-                <select
-                  className="focus-ring rounded-md border border-campus-mist bg-white px-3 py-2 text-sm"
-                  disabled={updatingId === listing.id}
-                  id={`status-${listing.id}`}
-                  value={listing.status}
-                  onChange={(event) => {
-                    const next = event.target.value as ListingStatus;
-                    if (OWNER_EDITABLE_STATUSES.includes(next)) {
-                      void handleStatusChange(listing, next);
-                    }
-                  }}
+        <ul className="space-y-3">
+          {listings.map((listing) => {
+            const cover = listing.images[0];
+            return (
+              <li key={listing.id} className="panel flex flex-col gap-4 p-4 md:flex-row md:items-center">
+                <Link
+                  className="focus-ring size-24 shrink-0 overflow-hidden rounded-2xl bg-campus-mist"
+                  to={listingDetailsPath(listing.id)}
                 >
-                  {OWNER_EDITABLE_STATUSES.map((status) => (
-                    <option key={status} value={status}>
-                      {STATUS_LABELS[status]}
-                    </option>
-                  ))}
-                </select>
-
-                <Link to={editListingPath(listing.id)}>
-                  <Button variant="secondary">Edit</Button>
+                  {cover ? (
+                    <img
+                      alt=""
+                      className="size-full object-cover"
+                      height={96}
+                      src={cover.url}
+                      width={96}
+                    />
+                  ) : (
+                    <span className="flex size-full items-center justify-center text-xs text-campus-ink/45">
+                      No photo
+                    </span>
+                  )}
                 </Link>
-                <Button variant="danger" onPress={() => setDeleteTarget(listing)}>
-                  Delete
-                </Button>
-              </div>
-            </li>
-          ))}
+
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Link
+                      className="font-display text-2xl tracking-tight text-campus-ink hover:text-campus-leaf"
+                      to={listingDetailsPath(listing.id)}
+                    >
+                      {listing.title}
+                    </Link>
+                    <ListingStatusBadge status={listing.status} />
+                  </div>
+                  <p className="text-sm text-campus-ink/70">
+                    {formatMoney(listing.price, listing.currencyCode)} · {listing.locationLabel}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <label className="sr-only" htmlFor={`status-${listing.id}`}>
+                    Status for {listing.title}
+                  </label>
+                  <select
+                    className="focus-ring h-10 rounded-full border border-campus-mist bg-white px-4 text-sm font-semibold"
+                    disabled={updatingId === listing.id}
+                    id={`status-${listing.id}`}
+                    value={listing.status}
+                    onChange={(event) => {
+                      const next = event.target.value as ListingStatus;
+                      if (OWNER_EDITABLE_STATUSES.includes(next)) {
+                        void handleStatusChange(listing, next);
+                      }
+                    }}
+                  >
+                    {OWNER_EDITABLE_STATUSES.map((status) => (
+                      <option key={status} value={status}>
+                        {STATUS_LABELS[status]}
+                      </option>
+                    ))}
+                  </select>
+
+                  <Link to={editListingPath(listing.id)}>
+                    <Button variant="secondary">Edit</Button>
+                  </Link>
+                  <Button variant="danger" onPress={() => setDeleteTarget(listing)}>
+                    Delete
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
 

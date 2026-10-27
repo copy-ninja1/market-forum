@@ -1,15 +1,23 @@
 import { NavLink } from "react-router-dom";
 import { PRIMARY_NAV_ITEMS } from "@/components/layout/nav.constants";
 
-const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-  [
-    "rounded-md px-3 py-2 text-sm font-medium transition-colors focus-ring",
-    isActive
-      ? "bg-campus-leaf/15 text-campus-leaf"
-      : "text-campus-ink/80 hover:bg-campus-mist/60 hover:text-campus-ink",
-  ].join(" ");
+type MainNavigationProps = {
+  readonly tone?: "ink" | "light";
+};
 
-export function MainNavigation() {
+export function MainNavigation({ tone = "ink" }: MainNavigationProps) {
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    [
+      "rounded-full px-3.5 py-2 text-sm font-semibold transition-colors duration-200 focus-ring",
+      tone === "light"
+        ? isActive
+          ? "bg-white/15 text-white"
+          : "text-white/80 hover:bg-white/10 hover:text-white"
+        : isActive
+          ? "bg-campus-ink text-campus-paper"
+          : "text-campus-ink/75 hover:bg-white hover:text-campus-ink",
+    ].join(" ");
+
   return (
     <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
       {PRIMARY_NAV_ITEMS.map((item) => (

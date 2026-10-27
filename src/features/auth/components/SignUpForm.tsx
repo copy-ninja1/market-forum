@@ -53,9 +53,14 @@ export function SignUpForm() {
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-      <div className="space-y-1 text-center">
-        <h1 className="font-display text-2xl text-campus-ink">Join the marketplace</h1>
-        <p className="text-sm text-campus-ink/70">Create a student account to buy and sell on campus.</p>
+      <div className="space-y-2">
+        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-leaf">
+          Create account
+        </p>
+        <h1 className="font-display text-4xl tracking-tight text-campus-ink">Join the marketplace</h1>
+        <p className="text-sm leading-relaxed text-campus-ink/70">
+          Create a student account to post listings and report suspicious ones.
+        </p>
       </div>
 
       {formError ? <FormError message={formError} title="Sign up failed" /> : null}

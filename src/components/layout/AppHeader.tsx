@@ -1,42 +1,76 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@heroui/react";
 import { APP_NAME } from "@/constants/app.constants";
 import { ROUTES } from "@/constants/route.constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import type { AppHeaderProps } from "@/components/layout/layout.interfaces";
+import { BrandMark } from "@/components/layout/BrandMark";
 import { MainNavigation } from "@/components/layout/MainNavigation";
 import { MobileNavigation } from "@/components/layout/MobileNavigation";
 
-const authLinkClass = ({ isActive }: { isActive: boolean }) =>
-  [
-    "text-sm font-medium focus-ring rounded-md px-2 py-1",
-    isActive ? "text-campus-leaf" : "text-campus-ink/75 hover:text-campus-ink",
-  ].join(" ");
-
 export function AppHeader({ className }: AppHeaderProps) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { isAuthenticated, isAdmin, isLoading, signOut } = useAuth();
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isHome = pathname === "/";
+  const overlay = isHome && !scrolled && !menuOpen;
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 8);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const authLinkClass = ({ isActive }: { isActive: boolean }) =>
+    [
+      "rounded-full px-3 py-2 text-sm font-semibold focus-ring",
+      overlay
+        ? isActive
+          ? "text-white"
+          : "text-white/80 hover:text-white"
+        : isActive
+          ? "text-campus-leaf"
+          : "text-campus-ink/75 hover:text-campus-ink",
+    ].join(" ");
 
   return (
     <header
-      className={`relative sticky top-0 z-40 border-b border-campus-mist/80 bg-campus-paper/90 backdrop-blur-md ${className ?? ""}`.trim()}
+      className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
+        overlay
+          ? "border-b border-transparent bg-transparent text-white"
+          : "border-b border-campus-mist/80 bg-campus-paper/92 text-campus-ink backdrop-blur-md"
+      } ${className ?? ""}`.trim()}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
         <div className="flex min-w-0 items-center gap-6">
-          <Link
-            to={ROUTES.home}
-            className="focus-ring flex min-w-0 items-center gap-2 rounded-md"
-          >
-            <img src="/favicon.svg" alt="" className="size-8 shrink-0" width={32} height={32} />
-            <span className="font-display truncate text-lg text-campus-ink md:text-xl">{APP_NAME}</span>
+          <Link to={ROUTES.home} className="focus-ring flex min-w-0 items-center gap-2.5 rounded-md">
+            <BrandMark className={overlay ? "bg-white text-campus-ink" : undefined} />
+            <span className="min-w-0">
+              <span className="font-display block truncate text-lg leading-none tracking-tight md:text-xl">
+                {APP_NAME}
+              </span>
+              <span
+                className={`mt-1 hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] lg:block ${
+                  overlay ? "text-white/70" : "text-campus-ink/50"
+                }`}
+              >
+                Campus marketplace
+              </span>
+            </span>
           </Link>
-          <MainNavigation />
+          <MainNavigation tone={overlay ? "light" : "ink"} />
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-1 md:flex">
             {isLoading ? (
-              <span className="text-sm text-campus-ink/50">…</span>
+              <span className={`text-sm ${overlay ? "text-white/70" : "text-campus-ink/50"}`}>…</span>
             ) : isAuthenticated ? (
               <>
                 {isAdmin ? (
@@ -63,8 +97,8 @@ export function AppHeader({ className }: AppHeaderProps) {
                   Sign in
                 </NavLink>
                 <Button
-                  variant="primary"
                   size="sm"
+                  variant="primary"
                   onPress={() => {
                     navigate(ROUTES.signUp);
                   }}
@@ -73,8 +107,20 @@ export function AppHeader({ className }: AppHeaderProps) {
                 </Button>
               </>
             )}
+            <Button
+              size="sm"
+              variant={overlay ? "secondary" : "primary"}
+              className={overlay ? "bg-white text-campus-ink" : undefined}
+              onPress={() => {
+                navigate(isAuthenticated ? ROUTES.createListing : ROUTES.signIn, {
+                  state: isAuthenticated ? undefined : { from: ROUTES.createListing },
+                });
+              }}
+            >
+              List an item
+            </Button>
           </div>
-          <MobileNavigation />
+          <MobileNavigation tone={overlay ? "light" : "ink"} onOpenChange={setMenuOpen} />
         </div>
       </div>
     </header>

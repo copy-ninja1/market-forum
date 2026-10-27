@@ -53,9 +53,14 @@ export function PasswordResetForm() {
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-      <div className="space-y-1 text-center">
-        <h1 className="font-display text-2xl text-campus-ink">Reset password</h1>
-        <p className="text-sm text-campus-ink/70">We will email you a link to choose a new password.</p>
+      <div className="space-y-2">
+        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-leaf">
+          Account recovery
+        </p>
+        <h1 className="font-display text-4xl tracking-tight text-campus-ink">Reset password</h1>
+        <p className="text-sm leading-relaxed text-campus-ink/70">
+          We will email you a link to choose a new password.
+        </p>
       </div>
 
       {isSuccess ? (

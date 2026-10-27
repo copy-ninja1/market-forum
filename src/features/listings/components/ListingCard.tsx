@@ -1,4 +1,3 @@
-import { Card } from "@heroui/react";
 import { Link } from "react-router-dom";
 import { listingDetailsPath } from "@/constants/route.constants";
 import { ListingStatusBadge } from "@/features/listings/components/ListingStatusBadge";
@@ -10,38 +9,39 @@ export function ListingCard({ listing }: ListingCardProps) {
   const detailPath = listingDetailsPath(listing.id);
 
   return (
-    <Link className="focus-ring block rounded-xl" to={detailPath}>
-    <Card
-      className="group overflow-hidden border border-campus-mist/80 bg-campus-paper transition hover:border-campus-leaf/40 hover:shadow-md"
-      variant="secondary"
-    >
-      <div className="aspect-[4/3] overflow-hidden bg-campus-mist/40">
-        {cover ? (
-          <img
-            alt={cover.altText}
-            className="size-full object-cover transition duration-300 group-hover:scale-[1.02]"
-            height={240}
-            loading="lazy"
-            src={cover.url}
-            width={320}
-          />
-        ) : (
-          <div className="flex size-full items-center justify-center text-sm text-campus-ink/50">No photo</div>
-        )}
-      </div>
-      <Card.Content className="space-y-3 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <Card.Title className="line-clamp-2 font-display text-lg leading-snug text-campus-ink">
-            {listing.title}
-          </Card.Title>
-          <ListingStatusBadge status={listing.status} />
+    <article className="h-full">
+      <Link className="focus-ring group flex h-full flex-col overflow-hidden rounded-3xl bg-white" to={detailPath}>
+        <div className="relative aspect-[4/5] overflow-hidden bg-campus-mist">
+          {cover ? (
+            <img
+              alt={cover.altText}
+              className="size-full object-cover transition duration-500 group-hover:scale-[1.04]"
+              height={480}
+              loading="lazy"
+              src={cover.url}
+              width={360}
+            />
+          ) : (
+            <div className="flex size-full items-end bg-[radial-gradient(circle_at_30%_20%,oklch(0.93_0.02_88),oklch(0.86_0.02_88))] p-4">
+              <span className="font-display text-2xl text-campus-ink/35">No photo</span>
+            </div>
+          )}
+          <div className="absolute left-3 top-3">
+            <ListingStatusBadge status={listing.status} />
+          </div>
+          <p className="absolute bottom-3 left-3 rounded-full bg-campus-paper/95 px-3 py-1 text-sm font-semibold text-campus-ink">
+            {formatMoney(listing.price, listing.currencyCode)}
+          </p>
         </div>
-        <p className="font-medium text-campus-leaf">{formatMoney(listing.price, listing.currencyCode)}</p>
-        <Card.Description className="line-clamp-1 text-sm">
-          {listing.categoryName} · {listing.locationLabel}
-        </Card.Description>
-      </Card.Content>
-    </Card>
-    </Link>
+        <div className="flex flex-1 flex-col gap-2 px-4 py-4">
+          <h2 className="font-display line-clamp-2 text-xl leading-snug tracking-tight text-campus-ink">
+            {listing.title}
+          </h2>
+          <p className="mt-auto text-sm text-campus-ink/65">
+            {listing.categoryName} · {listing.locationLabel}
+          </p>
+        </div>
+      </Link>
+    </article>
   );
 }

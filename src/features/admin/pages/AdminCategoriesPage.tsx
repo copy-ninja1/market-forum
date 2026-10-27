@@ -104,11 +104,37 @@ export function AdminCategoriesPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        description="Manage browse filters and listing categories for the campus marketplace."
+        description="Categories power the browse filters. Only administrators can add them."
+        eyebrow="Catalog"
         title="Categories"
       />
 
-      <section className="rounded-xl border border-campus-mist bg-campus-paper/80 p-4 md:p-6">
+      <div className="grid gap-3 sm:grid-cols-3">
+        <article className="panel px-5 py-4">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-ink/55">
+            Total
+          </p>
+          <p className="font-display mt-2 text-3xl text-campus-ink">{categories.length}</p>
+        </article>
+        <article className="panel px-5 py-4">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-ink/55">
+            Active
+          </p>
+          <p className="font-display mt-2 text-3xl text-campus-ink">
+            {categories.filter((category) => category.isActive).length}
+          </p>
+        </article>
+        <article className="panel px-5 py-4">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-ink/55">
+            Hidden
+          </p>
+          <p className="font-display mt-2 text-3xl text-campus-ink">
+            {categories.filter((category) => !category.isActive).length}
+          </p>
+        </article>
+      </div>
+
+      <section className="panel p-5 md:p-6">
         <h2 className="font-display text-lg text-campus-ink">Create category</h2>
         <form className="mt-4 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit} noValidate>
           {formSuccess ? (
@@ -179,7 +205,7 @@ export function AdminCategoriesPage() {
             title="No categories yet"
           />
         ) : (
-          <ul className="mt-4 divide-y divide-campus-mist rounded-xl border border-campus-mist bg-campus-paper/80">
+          <ul className="panel mt-4 divide-y divide-campus-mist">
             {categories.map((category) => (
               <li
                 key={category.id}

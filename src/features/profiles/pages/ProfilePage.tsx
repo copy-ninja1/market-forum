@@ -5,6 +5,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ProfileForm } from "@/features/profiles/components/ProfileForm";
 import { profileService } from "@/features/profiles/services/profileService";
 import type { UpdateProfileSchema } from "@/features/profiles/schemas/profileSchemas";
+import { formatRelativeDate } from "@/utils/date.utils";
 
 export function ProfilePage() {
   const { profile, isLoading, refreshProfile } = useAuth();
@@ -27,13 +28,47 @@ export function ProfilePage() {
     await refreshProfile();
   };
 
+  const initial = profile.displayName.trim().charAt(0).toUpperCase() || "S";
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
-        description="Keep your campus details and preferred contact method up to date."
+        description="Your display name and contact method are what other students see on a listing."
+        eyebrow="Account"
         title="Your profile"
       />
-      <ProfileForm profile={profile} onSubmit={handleSubmit} />
+
+      <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <aside className="panel p-6">
+          {profile.avatarUrl ? (
+            <img
+              alt=""
+              className="size-20 rounded-2xl object-cover"
+              height={80}
+              src={profile.avatarUrl}
+              width={80}
+            />
+          ) : (
+            <div className="font-display flex size-20 items-center justify-center rounded-2xl bg-campus-ink text-3xl text-campus-paper">
+              {initial}
+            </div>
+          )}
+          <h2 className="font-display mt-4 text-3xl tracking-tight text-campus-ink">
+            {profile.displayName}
+          </h2>
+          <p className="mt-1 text-sm text-campus-ink/70">{profile.institution || "Campus member"}</p>
+          {profile.email ? (
+            <p className="mt-4 break-all text-sm text-campus-ink/60">{profile.email}</p>
+          ) : null}
+          <p className="mt-4 text-xs uppercase tracking-[0.16em] text-campus-ink/45">
+            Member since {formatRelativeDate(profile.createdAt)}
+          </p>
+        </aside>
+
+        <section className="panel p-5 md:p-8">
+          <ProfileForm profile={profile} onSubmit={handleSubmit} />
+        </section>
+      </div>
     </div>
   );
 }

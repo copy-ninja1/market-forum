@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { MARKET_IMAGES } from "@/constants/marketing.constants";
 import { listingDetailsPath } from "@/constants/route.constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useCategories } from "@/features/categories/hooks/useCategories";
@@ -48,18 +49,40 @@ export function CreateListingPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="space-y-8">
       <PageHeader
-        description="Share what you are selling with clear photos, price, and contact details."
+        description="Share a clear title, price, photo, and the contact method you want buyers to use."
+        eyebrow="New listing"
         title="Post a listing"
       />
-      <ListingForm
-        categories={categories}
-        isCategoriesLoading={isCategoriesLoading}
-        isSubmitting={isSubmitting}
-        mode="create"
-        onSubmit={handleSubmit}
-      />
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <div className="panel p-5 md:p-8">
+          <ListingForm
+            categories={categories}
+            isCategoriesLoading={isCategoriesLoading}
+            isSubmitting={isSubmitting}
+            mode="create"
+            onSubmit={handleSubmit}
+          />
+        </div>
+        <aside className="space-y-4 lg:sticky lg:top-28">
+          <img
+            alt="A stack of books on a desk"
+            className="aspect-[4/3] w-full rounded-3xl object-cover"
+            height={420}
+            src={MARKET_IMAGES.books}
+            width={560}
+          />
+          <div className="panel p-5 text-sm leading-relaxed text-campus-ink/75">
+            <p className="font-display text-2xl text-campus-ink">What buyers look for</p>
+            <ul className="mt-3 list-disc space-y-2 pl-4">
+              <li>A title that names the item, not a slogan.</li>
+              <li>The real condition and a campus meeting spot.</li>
+              <li>A contact method you are comfortable publishing.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

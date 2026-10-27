@@ -2,6 +2,7 @@ import { Button } from "@heroui/react";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { StatCard } from "@/components/ui/StatCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ReportQueueItem } from "@/features/admin/components/ReportQueueItem";
 import { useModerationQueue } from "@/features/admin/hooks/useModerationQueue";
@@ -18,17 +19,26 @@ export function ModerationQueuePage() {
     return <ErrorState message={error} onRetry={() => void reload()} />;
   }
 
+  const openCount = reports.filter((report) => report.status === "open" || report.status === "reviewing").length;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
         actions={
           <Button variant="secondary" onPress={() => void reload()}>
             Refresh
           </Button>
         }
-        description="Review open reports and take action on listings that violate campus guidelines."
+        description="Review reports and record a reason when you hide or dismiss a listing."
+        eyebrow="Trust"
         title="Moderation queue"
       />
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <StatCard hint="Waiting in this view" label="In queue" value={reports.length} />
+        <StatCard hint="Open or still in review" label="Needs action" value={openCount} />
+        <StatCard hint="Resolved or dismissed" label="Closed" value={reports.length - openCount} />
+      </div>
 
       {reports.length === 0 ? (
         <EmptyState

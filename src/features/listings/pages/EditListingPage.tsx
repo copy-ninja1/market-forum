@@ -78,17 +78,23 @@ export function EditListingPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <PageHeader description="Update details, photos, or availability." title="Edit listing" />
-      <ListingForm
-        categories={categories}
-        existingImages={listing.images}
-        initialValues={listing}
-        isCategoriesLoading={isCategoriesLoading}
-        isSubmitting={isSubmitting}
-        mode="edit"
-        onSubmit={handleSubmit}
+    <div className="mx-auto max-w-3xl space-y-8">
+      <PageHeader
+        description="Update details, photos, or the contact method buyers will see."
+        eyebrow="Your listing"
+        title="Edit listing"
       />
+      <div className="panel p-5 md:p-8">
+        <ListingForm
+          categories={categories}
+          existingImages={listing.images}
+          initialValues={listing}
+          isCategoriesLoading={isCategoriesLoading}
+          isSubmitting={isSubmitting}
+          mode="edit"
+          onSubmit={handleSubmit}
+        />
+      </div>
     </div>
   );
 }

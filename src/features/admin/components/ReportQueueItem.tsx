@@ -20,8 +20,8 @@ export function ReportQueueItem({
     : listingTitle ?? "Listing unavailable";
 
   return (
-    <Card className="border border-campus-mist/80 bg-campus-paper/90">
-      <Card.Content className="space-y-4 p-4 md:p-6">
+    <Card className="panel shadow-none">
+      <Card.Content className="space-y-4 p-5 md:p-6">
         <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-wide text-campus-ink/60">

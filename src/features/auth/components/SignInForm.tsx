@@ -59,9 +59,14 @@ export function SignInForm() {
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-      <div className="space-y-1 text-center">
-        <h1 className="font-display text-2xl text-campus-ink">Welcome back</h1>
-        <p className="text-sm text-campus-ink/70">Sign in to manage listings and contact sellers.</p>
+      <div className="space-y-2">
+        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-leaf">
+          Sign in
+        </p>
+        <h1 className="font-display text-4xl tracking-tight text-campus-ink">Welcome back</h1>
+        <p className="text-sm leading-relaxed text-campus-ink/70">
+          Sign in to manage listings and contact sellers.
+        </p>
       </div>
 
       {formError ? <FormError message={formError} title="Sign in failed" /> : null}

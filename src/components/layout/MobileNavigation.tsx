@@ -5,38 +5,49 @@ import { ROUTES } from "@/constants/route.constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { PRIMARY_NAV_ITEMS } from "@/components/layout/nav.constants";
 
+type MobileNavigationProps = {
+  readonly tone?: "ink" | "light";
+  readonly onOpenChange?: (open: boolean) => void;
+};
+
 const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
   [
-    "block rounded-md px-3 py-2 text-sm font-medium focus-ring",
-    isActive ? "bg-campus-leaf/15 text-campus-leaf" : "text-campus-ink hover:bg-campus-mist/70",
+    "block rounded-xl px-3 py-2.5 text-sm font-semibold focus-ring",
+    isActive ? "bg-campus-ink text-campus-paper" : "text-campus-ink hover:bg-campus-mist/70",
   ].join(" ");
 
-export function MobileNavigation() {
+export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigationProps) {
   const { isAuthenticated, isAdmin, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const setOpen = (open: boolean) => {
+    setMenuOpen(open);
+    onOpenChange?.(open);
+  };
+
   const closeMenu = () => {
-    setMenuOpen(false);
+    setOpen(false);
   };
 
   return (
     <div className="md:hidden">
       <Button
-        variant="secondary"
+        variant={tone === "light" && !menuOpen ? "secondary" : "secondary"}
         size="sm"
         aria-expanded={menuOpen}
         aria-controls="mobile-nav-panel"
+        className={tone === "light" && !menuOpen ? "bg-white/15 text-white" : undefined}
         onPress={() => {
-          setMenuOpen((open) => !open);
+          setOpen(!menuOpen);
         }}
       >
-        Menu
+        {menuOpen ? "Close" : "Menu"}
       </Button>
 
       {menuOpen ? (
         <div
           id="mobile-nav-panel"
-          className="absolute inset-x-0 top-full z-50 border-b border-campus-mist bg-campus-paper/98 px-4 py-4 shadow-sm backdrop-blur-sm"
+          className="absolute inset-x-0 top-full z-50 border-b border-campus-mist bg-campus-paper px-4 py-4 shadow-lg"
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile">
             {PRIMARY_NAV_ITEMS.map((item) => (
@@ -53,7 +64,7 @@ export function MobileNavigation() {
 
             <Disclosure className="mt-2 border-t border-campus-mist pt-2">
               <Disclosure.Heading>
-                <Disclosure.Trigger className="w-full justify-between text-sm font-medium text-campus-ink">
+                <Disclosure.Trigger className="w-full justify-between text-sm font-semibold text-campus-ink">
                   Account
                   <Disclosure.Indicator />
                 </Disclosure.Trigger>
@@ -71,7 +82,7 @@ export function MobileNavigation() {
                           className={mobileLinkClass}
                           onClick={closeMenu}
                         >
-                          Admin
+                          Admin desk
                         </NavLink>
                       ) : null}
                       <Button

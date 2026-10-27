@@ -7,21 +7,21 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-[4/3] items-center justify-center rounded-xl border border-campus-mist bg-campus-mist/30 text-campus-ink/60">
-        No photos for this listing
+      <div className="flex aspect-[4/5] items-end rounded-[2rem] bg-[radial-gradient(circle_at_30%_20%,oklch(0.94_0.02_88),oklch(0.86_0.02_88))] p-6">
+        <p className="font-display text-4xl text-campus-ink/40">No photos yet</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-3">
-      <div className="aspect-[4/3] overflow-hidden rounded-xl border border-campus-mist bg-campus-mist/20">
+      <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-campus-mist sm:aspect-[5/4]">
         <img
           alt={activeImage?.altText ?? title}
           className="size-full object-cover"
-          height={480}
+          height={720}
           src={activeImage?.url}
-          width={640}
+          width={900}
         />
       </div>
       {images.length > 1 ? (
@@ -29,13 +29,14 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
           {images.map((image, index) => (
             <li key={image.storagePath}>
               <button
-                className={`focus-ring size-16 shrink-0 overflow-hidden rounded-lg border-2 ${
-                  index === activeIndex ? "border-campus-leaf" : "border-transparent opacity-80"
+                aria-label={`Show photo ${index + 1} of ${title}`}
+                className={`focus-ring size-20 shrink-0 overflow-hidden rounded-2xl border-2 ${
+                  index === activeIndex ? "border-campus-ink" : "border-transparent opacity-75"
                 }`}
                 type="button"
                 onClick={() => setActiveIndex(index)}
               >
-                <img alt={image.altText} className="size-full object-cover" height={64} src={image.url} width={64} />
+                <img alt="" className="size-full object-cover" height={80} src={image.url} width={80} />
               </button>
             </li>
           ))}

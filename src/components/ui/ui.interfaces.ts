@@ -23,6 +23,7 @@ export type LoadingStateProps = {
 
 export type PageHeaderProps = {
   title: string;
+  eyebrow?: string;
   description?: string;
   actions?: ReactNode;
   className?: string;

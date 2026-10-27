@@ -7,8 +7,8 @@ export function LoadingState({
   fullScreen = false,
 }: LoadingStateProps) {
   const containerClass = fullScreen
-    ? "flex min-h-[50vh] flex-col items-center justify-center gap-3"
-    : "flex flex-col items-center justify-center gap-3 py-12";
+    ? "flex min-h-screen flex-col items-center justify-center gap-3"
+    : "panel flex flex-col items-center justify-center gap-3 py-16";
 
   return (
     <div
