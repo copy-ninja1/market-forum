@@ -351,7 +351,7 @@ export function ListingForm({
             <img
               key={image.storagePath}
               alt={image.altText}
-              className="size-20 rounded-lg border border-campus-mist object-cover"
+              className="size-20 rounded-lg object-cover"
               height={80}
               src={image.url}
               width={80}
@@ -361,7 +361,7 @@ export function ListingForm({
             <div key={preview.id} className="relative">
               <img
                 alt=""
-                className="size-20 rounded-lg border border-campus-mist object-cover"
+                className="size-20 rounded-lg object-cover"
                 height={80}
                 src={preview.url}
                 width={80}

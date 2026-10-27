@@ -30,13 +30,21 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
             <li key={image.storagePath}>
               <button
                 aria-label={`Show photo ${index + 1} of ${title}`}
-                className={`focus-ring size-20 shrink-0 overflow-hidden rounded-2xl border-2 ${
-                  index === activeIndex ? "border-campus-ink" : "border-transparent opacity-75"
+                className={` size-20 shrink-0 overflow-hidden rounded-2xl border-2 ${
+                  index === activeIndex
+                    ? "border-campus-ink"
+                    : "border-transparent opacity-75"
                 }`}
                 type="button"
                 onClick={() => setActiveIndex(index)}
               >
-                <img alt="" className="size-full object-cover" height={80} src={image.url} width={80} />
+                <img
+                  alt=""
+                  className="size-full object-cover"
+                  height={80}
+                  src={image.url}
+                  width={80}
+                />
               </button>
             </li>
           ))}

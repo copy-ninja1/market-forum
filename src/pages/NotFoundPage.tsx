@@ -20,7 +20,7 @@ export function NotFoundPage() {
             </Button>
           </Link>
           <Link to={ROUTES.browse}>
-            <Button className="border border-white/30 bg-transparent text-white" variant="tertiary">
+            <Button className="bg-white/10 text-white" variant="tertiary">
               Browse listings
             </Button>
           </Link>

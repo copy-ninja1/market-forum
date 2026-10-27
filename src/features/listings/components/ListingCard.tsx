@@ -10,7 +10,10 @@ export function ListingCard({ listing }: ListingCardProps) {
 
   return (
     <article className="h-full">
-      <Link className="focus-ring group flex h-full flex-col overflow-hidden rounded-3xl bg-white" to={detailPath}>
+      <Link
+        className=" group flex h-full flex-col overflow-hidden rounded-3xl bg-white"
+        to={detailPath}
+      >
         <div className="relative aspect-[4/5] overflow-hidden bg-campus-mist">
           {cover ? (
             <img
@@ -23,7 +26,9 @@ export function ListingCard({ listing }: ListingCardProps) {
             />
           ) : (
             <div className="flex size-full items-end bg-[radial-gradient(circle_at_30%_20%,oklch(0.93_0.02_88),oklch(0.86_0.02_88))] p-4">
-              <span className="font-display text-2xl text-campus-ink/35">No photo</span>
+              <span className="font-display text-2xl text-campus-ink/35">
+                No photo
+              </span>
             </div>
           )}
           <div className="absolute left-3 top-3">

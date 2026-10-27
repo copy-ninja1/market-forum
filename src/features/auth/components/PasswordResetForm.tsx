@@ -57,7 +57,9 @@ export function PasswordResetForm() {
         <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-leaf">
           Account recovery
         </p>
-        <h1 className="font-display text-4xl tracking-tight text-campus-ink">Reset password</h1>
+        <h1 className="font-display text-4xl tracking-tight text-campus-ink">
+          Reset password
+        </h1>
         <p className="text-sm leading-relaxed text-campus-ink/70">
           We will email you a link to choose a new password.
         </p>
@@ -70,7 +72,9 @@ export function PasswordResetForm() {
         />
       ) : null}
 
-      {formError ? <FormError message={formError} title="Reset failed" /> : null}
+      {formError ? (
+        <FormError message={formError} title="Reset failed" />
+      ) : null}
 
       <TextField isInvalid={Boolean(fieldErrors.email)} fullWidth>
         <Label>Email</Label>
@@ -82,7 +86,9 @@ export function PasswordResetForm() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-        {fieldErrors.email ? <FieldError>{fieldErrors.email}</FieldError> : null}
+        {fieldErrors.email ? (
+          <FieldError>{fieldErrors.email}</FieldError>
+        ) : null}
       </TextField>
 
       <Button className="w-full" type="submit" isDisabled={isSubmitting}>
@@ -90,7 +96,10 @@ export function PasswordResetForm() {
       </Button>
 
       <p className="text-center text-sm text-campus-ink/70">
-        <Link className="focus-ring font-medium text-campus-leaf hover:underline" to={ROUTES.signIn}>
+        <Link
+          className=" font-medium text-campus-leaf hover:underline"
+          to={ROUTES.signIn}
+        >
           Back to sign in
         </Link>
       </p>

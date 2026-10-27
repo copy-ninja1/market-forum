@@ -33,22 +33,26 @@ export function ReportQueueItem({
             <p className="text-sm text-campus-ink/75">
               Listing:{" "}
               <Link
-                className="text-campus-leaf hover:underline focus-ring rounded-sm"
+                className="text-campus-leaf hover:underline  rounded-sm"
                 to={listingDetailsPath(report.listingId)}
               >
                 {listingLabel}
               </Link>
             </p>
           </div>
-          <p className="text-xs text-campus-ink/60">Report #{report.id.slice(0, 8)}</p>
+          <p className="text-xs text-campus-ink/60">
+            Report #{report.id.slice(0, 8)}
+          </p>
         </div>
 
         {report.details ? (
-          <blockquote className="rounded-lg border border-campus-mist/70 bg-campus-mist/30 px-3 py-2 text-sm text-campus-ink/80">
+          <blockquote className="rounded-lg bg-campus-mist/30 px-3 py-2 text-sm text-campus-ink/80">
             {report.details}
           </blockquote>
         ) : (
-          <p className="text-sm italic text-campus-ink/60">No additional details provided.</p>
+          <p className="text-sm italic text-campus-ink/60">
+            No additional details provided.
+          </p>
         )}
 
         <ModerateReportForm

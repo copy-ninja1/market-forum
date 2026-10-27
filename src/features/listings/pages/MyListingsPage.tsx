@@ -81,9 +81,12 @@ export function MyListingsPage() {
           {listings.map((listing) => {
             const cover = listing.images[0];
             return (
-              <li key={listing.id} className="panel flex flex-col gap-4 p-4 md:flex-row md:items-center">
+              <li
+                key={listing.id}
+                className="panel flex flex-col gap-4 p-4 md:flex-row md:items-center"
+              >
                 <Link
-                  className="focus-ring size-24 shrink-0 overflow-hidden rounded-2xl bg-campus-mist"
+                  className=" size-24 shrink-0 overflow-hidden rounded-2xl bg-campus-mist"
                   to={listingDetailsPath(listing.id)}
                 >
                   {cover ? (
@@ -112,7 +115,8 @@ export function MyListingsPage() {
                     <ListingStatusBadge status={listing.status} />
                   </div>
                   <p className="text-sm text-campus-ink/70">
-                    {formatMoney(listing.price, listing.currencyCode)} · {listing.locationLabel}
+                    {formatMoney(listing.price, listing.currencyCode)} ·{" "}
+                    {listing.locationLabel}
                   </p>
                 </div>
 
@@ -121,7 +125,7 @@ export function MyListingsPage() {
                     Status for {listing.title}
                   </label>
                   <select
-                    className="focus-ring h-10 rounded-full border border-campus-mist bg-white px-4 text-sm font-semibold"
+                    className=" h-10 rounded-full bg-campus-mist/60 px-4 text-sm font-semibold"
                     disabled={updatingId === listing.id}
                     id={`status-${listing.id}`}
                     value={listing.status}
@@ -142,7 +146,10 @@ export function MyListingsPage() {
                   <Link to={editListingPath(listing.id)}>
                     <Button variant="secondary">Edit</Button>
                   </Link>
-                  <Button variant="danger" onPress={() => setDeleteTarget(listing)}>
+                  <Button
+                    variant="danger"
+                    onPress={() => setDeleteTarget(listing)}
+                  >
                     Delete
                   </Button>
                 </div>

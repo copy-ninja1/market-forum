@@ -12,8 +12,10 @@ type MobileNavigationProps = {
 
 const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
   [
-    "block rounded-xl px-3 py-2.5 text-sm font-semibold focus-ring",
-    isActive ? "bg-campus-ink text-campus-paper" : "text-campus-ink hover:bg-campus-mist/70",
+    "block rounded-xl px-3 py-2.5 text-sm font-semibold ",
+    isActive
+      ? "bg-campus-ink text-campus-paper"
+      : "text-campus-ink hover:bg-campus-mist/70",
   ].join(" ");
 
 export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigationProps) {
@@ -30,13 +32,15 @@ export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigatio
   };
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <Button
         variant={tone === "light" && !menuOpen ? "secondary" : "secondary"}
         size="sm"
         aria-expanded={menuOpen}
         aria-controls="mobile-nav-panel"
-        className={tone === "light" && !menuOpen ? "bg-white/15 text-white" : undefined}
+        className={
+          tone === "light" && !menuOpen ? "bg-white/15 text-white" : undefined
+        }
         onPress={() => {
           setOpen(!menuOpen);
         }}
@@ -47,7 +51,7 @@ export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigatio
       {menuOpen ? (
         <div
           id="mobile-nav-panel"
-          className="absolute inset-x-0 top-full z-50 border-b border-campus-mist bg-campus-paper px-4 py-4 shadow-lg"
+          className="absolute inset-x-0 top-full z-50 bg-campus-paper px-4 py-4 shadow-lg"
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile">
             {PRIMARY_NAV_ITEMS.map((item) => (
@@ -62,7 +66,7 @@ export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigatio
               </NavLink>
             ))}
 
-            <Disclosure className="mt-2 border-t border-campus-mist pt-2">
+            <Disclosure className="mt-2 pt-2">
               <Disclosure.Heading>
                 <Disclosure.Trigger className="w-full justify-between text-sm font-semibold text-campus-ink">
                   Account
@@ -73,7 +77,11 @@ export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigatio
                 <Disclosure.Body className="flex flex-col gap-1 pt-2">
                   {isAuthenticated ? (
                     <>
-                      <NavLink to={ROUTES.profile} className={mobileLinkClass} onClick={closeMenu}>
+                      <NavLink
+                        to={ROUTES.profile}
+                        className={mobileLinkClass}
+                        onClick={closeMenu}
+                      >
                         Profile
                       </NavLink>
                       {isAdmin ? (
@@ -98,10 +106,18 @@ export function MobileNavigation({ tone = "ink", onOpenChange }: MobileNavigatio
                     </>
                   ) : (
                     <>
-                      <NavLink to={ROUTES.signIn} className={mobileLinkClass} onClick={closeMenu}>
+                      <NavLink
+                        to={ROUTES.signIn}
+                        className={mobileLinkClass}
+                        onClick={closeMenu}
+                      >
                         Sign in
                       </NavLink>
-                      <NavLink to={ROUTES.signUp} className={mobileLinkClass} onClick={closeMenu}>
+                      <NavLink
+                        to={ROUTES.signUp}
+                        className={mobileLinkClass}
+                        onClick={closeMenu}
+                      >
                         Create account
                       </NavLink>
                     </>

@@ -29,7 +29,7 @@ export function AppHeader({ className }: AppHeaderProps) {
 
   const authLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
-      "rounded-full px-3 py-2 text-sm font-semibold focus-ring",
+      "rounded-full px-3 py-2 text-sm font-semibold ",
       overlay
         ? isActive
           ? "text-white"
@@ -43,34 +43,35 @@ export function AppHeader({ className }: AppHeaderProps) {
     <header
       className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
         overlay
-          ? "border-b border-transparent bg-transparent text-white"
-          : "border-b border-campus-mist/80 bg-campus-paper/92 text-campus-ink backdrop-blur-md"
+          ? "bg-transparent text-white"
+          : "bg-campus-paper/92 text-campus-ink backdrop-blur-md"
       } ${className ?? ""}`.trim()}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
         <div className="flex min-w-0 items-center gap-6">
-          <Link to={ROUTES.home} className="focus-ring flex min-w-0 items-center gap-2.5 rounded-md">
-            <BrandMark className={overlay ? "bg-white text-campus-ink" : undefined} />
-            <span className="min-w-0">
-              <span className="font-display block truncate text-lg leading-none tracking-tight md:text-xl">
-                {APP_NAME}
-              </span>
-              <span
-                className={`mt-1 hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] lg:block ${
-                  overlay ? "text-white/70" : "text-campus-ink/50"
-                }`}
-              >
-                Campus marketplace
-              </span>
+          <Link
+            to={ROUTES.home}
+            aria-label={APP_NAME}
+            className=" flex shrink-0 items-center gap-2.5 rounded-md"
+          >
+            <BrandMark
+              className={overlay ? "bg-white text-campus-ink" : undefined}
+            />
+            <span className="font-display text-lg leading-none tracking-tight">
+              Forum
             </span>
           </Link>
           <MainNavigation tone={overlay ? "light" : "ink"} />
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             {isLoading ? (
-              <span className={`text-sm ${overlay ? "text-white/70" : "text-campus-ink/50"}`}>…</span>
+              <span
+                className={`text-sm ${overlay ? "text-white/70" : "text-campus-ink/50"}`}
+              >
+                …
+              </span>
             ) : isAuthenticated ? (
               <>
                 {isAdmin ? (
@@ -98,7 +99,7 @@ export function AppHeader({ className }: AppHeaderProps) {
                 </NavLink>
                 <Button
                   size="sm"
-                  variant="primary"
+                  variant="secondary"
                   onPress={() => {
                     navigate(ROUTES.signUp);
                   }}
@@ -109,18 +110,26 @@ export function AppHeader({ className }: AppHeaderProps) {
             )}
             <Button
               size="sm"
-              variant={overlay ? "secondary" : "primary"}
+              variant="primary"
               className={overlay ? "bg-white text-campus-ink" : undefined}
               onPress={() => {
-                navigate(isAuthenticated ? ROUTES.createListing : ROUTES.signIn, {
-                  state: isAuthenticated ? undefined : { from: ROUTES.createListing },
-                });
+                navigate(
+                  isAuthenticated ? ROUTES.createListing : ROUTES.signIn,
+                  {
+                    state: isAuthenticated
+                      ? undefined
+                      : { from: ROUTES.createListing },
+                  },
+                );
               }}
             >
               List an item
             </Button>
           </div>
-          <MobileNavigation tone={overlay ? "light" : "ink"} onOpenChange={setMenuOpen} />
+          <MobileNavigation
+            tone={overlay ? "light" : "ink"}
+            onOpenChange={setMenuOpen}
+          />
         </div>
       </div>
     </header>

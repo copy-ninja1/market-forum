@@ -57,13 +57,17 @@ export function SignUpForm() {
         <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-leaf">
           Create account
         </p>
-        <h1 className="font-display text-4xl tracking-tight text-campus-ink">Join the marketplace</h1>
+        <h1 className="font-display text-4xl tracking-tight text-campus-ink">
+          Join the marketplace
+        </h1>
         <p className="text-sm leading-relaxed text-campus-ink/70">
           Create a student account to post listings and report suspicious ones.
         </p>
       </div>
 
-      {formError ? <FormError message={formError} title="Sign up failed" /> : null}
+      {formError ? (
+        <FormError message={formError} title="Sign up failed" />
+      ) : null}
 
       <TextField isInvalid={Boolean(fieldErrors.displayName)} fullWidth>
         <Label>Display name</Label>
@@ -73,7 +77,9 @@ export function SignUpForm() {
           value={displayName}
           onChange={(event) => setDisplayName(event.target.value)}
         />
-        {fieldErrors.displayName ? <FieldError>{fieldErrors.displayName}</FieldError> : null}
+        {fieldErrors.displayName ? (
+          <FieldError>{fieldErrors.displayName}</FieldError>
+        ) : null}
       </TextField>
 
       <TextField isInvalid={Boolean(fieldErrors.institution)} fullWidth>
@@ -84,7 +90,9 @@ export function SignUpForm() {
           value={institution}
           onChange={(event) => setInstitution(event.target.value)}
         />
-        {fieldErrors.institution ? <FieldError>{fieldErrors.institution}</FieldError> : null}
+        {fieldErrors.institution ? (
+          <FieldError>{fieldErrors.institution}</FieldError>
+        ) : null}
       </TextField>
 
       <TextField isInvalid={Boolean(fieldErrors.email)} fullWidth>
@@ -97,7 +105,9 @@ export function SignUpForm() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
-        {fieldErrors.email ? <FieldError>{fieldErrors.email}</FieldError> : null}
+        {fieldErrors.email ? (
+          <FieldError>{fieldErrors.email}</FieldError>
+        ) : null}
       </TextField>
 
       <TextField isInvalid={Boolean(fieldErrors.password)} fullWidth>
@@ -109,7 +119,9 @@ export function SignUpForm() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {fieldErrors.password ? <FieldError>{fieldErrors.password}</FieldError> : null}
+        {fieldErrors.password ? (
+          <FieldError>{fieldErrors.password}</FieldError>
+        ) : null}
       </TextField>
 
       <Button className="w-full" type="submit" isDisabled={isSubmitting}>
@@ -118,7 +130,10 @@ export function SignUpForm() {
 
       <p className="text-center text-sm text-campus-ink/70">
         Already have an account?{" "}
-        <Link className="focus-ring font-medium text-campus-leaf hover:underline" to={ROUTES.signIn}>
+        <Link
+          className=" font-medium text-campus-leaf hover:underline"
+          to={ROUTES.signIn}
+        >
           Sign in
         </Link>
       </p>

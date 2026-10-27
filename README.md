@@ -10,12 +10,14 @@ A Firebase-powered campus marketplace where students browse listings, publish it
 - Image uploads to Firebase Storage with client validation
 - Listing reports and administrator moderation
 - Firestore and Storage security rules with emulator tests
+- Installable Progressive Web App (service worker + web app manifest)
 
 ## Stack
 
 - React 19 + TypeScript + Vite
 - HeroUI React v3 + Tailwind CSS v4
 - React Router
+- vite-plugin-pwa (Workbox)
 - Firebase Authentication, Firestore, Storage, Hosting
 - Vitest + React Testing Library + Firebase Emulator Suite
 

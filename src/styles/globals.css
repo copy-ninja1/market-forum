@@ -52,12 +52,12 @@ body {
 
 .panel {
   border-radius: 1.5rem;
-  border: 1px solid color-mix(in oklch, var(--color-campus-mist) 88%, white);
+  border: none;
   background: white;
   box-shadow: 0 18px 50px -36px oklch(0.22 0.04 255 / 0.7);
 }
 
-.focus-ring:focus-visible {
+.:focus-visible {
   outline: 2px solid var(--color-campus-leaf);
   outline-offset: 3px;
 }

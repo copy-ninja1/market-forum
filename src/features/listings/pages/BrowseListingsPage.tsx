@@ -51,9 +51,12 @@ export function BrowseListingsPage() {
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-white/70">
               Marketplace
             </p>
-            <h1 className="font-display mt-2 text-4xl tracking-tight md:text-6xl">Browse listings</h1>
+            <h1 className="font-display mt-2 text-4xl tracking-tight md:text-6xl">
+              Browse listings
+            </h1>
             <p className="mt-3 text-sm leading-relaxed text-white/80 md:text-base">
-              Textbooks, furniture, electronics, and the rest of campus — posted by people here.
+              Textbooks, furniture, electronics, and the rest of campus — posted
+              by people here.
             </p>
           </div>
           <Link to={ROUTES.createListing}>
@@ -71,10 +74,16 @@ export function BrowseListingsPage() {
           onChange={setSearchTerm}
         />
         {categories.length > 0 ? (
-          <div className="flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Categories">
+          <div
+            className="flex gap-2 overflow-x-auto pb-1"
+            role="group"
+            aria-label="Categories"
+          >
             <button
-              className={`focus-ring shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
-                categoryId === "" ? "bg-campus-ink text-campus-paper" : "bg-campus-mist/70 text-campus-ink"
+              className={` shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
+                categoryId === ""
+                  ? "bg-campus-ink text-campus-paper"
+                  : "bg-campus-mist/70 text-campus-ink"
               }`}
               type="button"
               onClick={() => setCategoryId("")}
@@ -85,7 +94,7 @@ export function BrowseListingsPage() {
               <button
                 key={category.id}
                 aria-pressed={categoryId === category.id}
-                className={`focus-ring shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
+                className={` shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
                   categoryId === category.id
                     ? "bg-campus-ink text-campus-paper"
                     : "bg-campus-mist/70 text-campus-ink"
@@ -111,16 +120,26 @@ export function BrowseListingsPage() {
       </div>
 
       {categoriesError ? (
-        <ErrorState message={categoriesError} retryLabel="Retry categories" onRetry={() => window.location.reload()} />
+        <ErrorState
+          message={categoriesError}
+          retryLabel="Retry categories"
+          onRetry={() => window.location.reload()}
+        />
       ) : null}
 
-      {error ? <ErrorState message={error} onRetry={() => void reload()} /> : null}
+      {error ? (
+        <ErrorState message={error} onRetry={() => void reload()} />
+      ) : null}
 
       <ListingGrid isLoading={isLoading} listings={listings} />
 
       {hasMore ? (
         <div className="flex justify-center pt-2">
-          <Button isDisabled={isLoadingMore} variant="secondary" onPress={() => void loadMore()}>
+          <Button
+            isDisabled={isLoadingMore}
+            variant="secondary"
+            onPress={() => void loadMore()}
+          >
             {isLoadingMore ? "Loading…" : "Load more"}
           </Button>
         </div>

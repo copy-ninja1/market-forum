@@ -8,7 +8,7 @@ type MainNavigationProps = {
 export function MainNavigation({ tone = "ink" }: MainNavigationProps) {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
-      "rounded-full px-3.5 py-2 text-sm font-semibold transition-colors duration-200 focus-ring",
+      "rounded-full px-3.5 py-2 text-sm font-semibold transition-colors duration-200 ",
       tone === "light"
         ? isActive
           ? "bg-white/15 text-white"
@@ -19,9 +19,14 @@ export function MainNavigation({ tone = "ink" }: MainNavigationProps) {
     ].join(" ");
 
   return (
-    <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+    <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
       {PRIMARY_NAV_ITEMS.map((item) => (
-        <NavLink key={item.to} to={item.to} end={item.end} className={navLinkClass}>
+        <NavLink
+          key={item.to}
+          to={item.to}
+          end={item.end}
+          className={navLinkClass}
+        >
           {item.label}
         </NavLink>
       ))}

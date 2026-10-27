@@ -58,7 +58,7 @@ export function ListingDetailsPage() {
   return (
     <div className="space-y-10">
       <nav aria-label="Breadcrumb" className="text-sm text-campus-ink/60">
-        <Link className="focus-ring rounded-sm hover:text-campus-ink" to={ROUTES.browse}>
+        <Link className=" rounded-sm hover:text-campus-ink" to={ROUTES.browse}>
           Browse
         </Link>
         <span aria-hidden className="px-2">
@@ -73,7 +73,9 @@ export function ListingDetailsPage() {
         <div className="space-y-5 lg:sticky lg:top-28">
           <div className="flex flex-wrap items-center gap-2">
             <ListingStatusBadge status={listing.status} />
-            <span className="text-sm text-campus-ink/60">{CONDITION_LABELS[listing.condition]}</span>
+            <span className="text-sm text-campus-ink/60">
+              {CONDITION_LABELS[listing.condition]}
+            </span>
           </div>
           <h1 className="font-display text-4xl tracking-tight text-campus-ink md:text-5xl">
             {listing.title}
@@ -82,7 +84,8 @@ export function ListingDetailsPage() {
             {formatMoney(listing.price, listing.currencyCode)}
           </p>
           <p className="text-sm text-campus-ink/65">
-            Posted {formatRelativeDate(listing.createdAt)} by {listing.ownerDisplayName}
+            Posted {formatRelativeDate(listing.createdAt)} by{" "}
+            {listing.ownerDisplayName}
           </p>
 
           <dl className="grid grid-cols-2 gap-4 rounded-3xl bg-white p-5 text-sm">
@@ -90,13 +93,17 @@ export function ListingDetailsPage() {
               <dt className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-campus-ink/50">
                 Category
               </dt>
-              <dd className="mt-1 font-semibold text-campus-ink">{listing.categoryName}</dd>
+              <dd className="mt-1 font-semibold text-campus-ink">
+                {listing.categoryName}
+              </dd>
             </div>
             <div>
               <dt className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-campus-ink/50">
                 Location
               </dt>
-              <dd className="mt-1 font-semibold text-campus-ink">{listing.locationLabel}</dd>
+              <dd className="mt-1 font-semibold text-campus-ink">
+                {listing.locationLabel}
+              </dd>
             </div>
           </dl>
 
@@ -104,13 +111,16 @@ export function ListingDetailsPage() {
             <h2 className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-campus-ink/50">
               {contactLabel}
             </h2>
-            <p className="mt-2 break-all text-lg font-semibold text-campus-ink">{listing.contactValue}</p>
+            <p className="mt-2 break-all text-lg font-semibold text-campus-ink">
+              {listing.contactValue}
+            </p>
             <p className="mt-2 text-sm leading-relaxed text-campus-ink/65">
-              This is the contact method the seller chose to publish. Meet in a public campus place.
+              This is the contact method the seller chose to publish. Meet in a
+              public campus place.
             </p>
             {contactHref ? (
               <a
-                className="focus-ring mt-4 inline-flex h-11 items-center rounded-full bg-campus-ink px-5 text-sm font-semibold text-campus-paper"
+                className=" mt-4 inline-flex h-11 items-center rounded-full bg-campus-ink px-5 text-sm font-semibold text-campus-paper"
                 href={contactHref}
               >
                 Contact seller
@@ -128,7 +138,9 @@ export function ListingDetailsPage() {
       </div>
 
       <section className="max-w-3xl">
-        <h2 className="font-display text-3xl tracking-tight text-campus-ink">Description</h2>
+        <h2 className="font-display text-3xl tracking-tight text-campus-ink">
+          Description
+        </h2>
         <p className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-campus-ink/80">
           {listing.description}
         </p>
@@ -136,14 +148,19 @@ export function ListingDetailsPage() {
 
       {!isOwner ? (
         <section className="panel max-w-3xl p-5 md:p-7">
-          <h2 className="font-display text-2xl text-campus-ink">Report this listing</h2>
+          <h2 className="font-display text-2xl text-campus-ink">
+            Report this listing
+          </h2>
           <p className="mt-1 text-sm text-campus-ink/70">
             Flag suspicious or prohibited content for moderator review.
           </p>
 
           {!isAuthenticated ? (
             <p className="mt-4 text-sm">
-              <Link className="font-semibold text-campus-leaf hover:underline" to={ROUTES.signIn}>
+              <Link
+                className="font-semibold text-campus-leaf hover:underline"
+                to={ROUTES.signIn}
+              >
                 Sign in
               </Link>{" "}
               to submit a report.
@@ -153,7 +170,9 @@ export function ListingDetailsPage() {
               listingId={listing.id}
               reporterUid={user?.uid ?? ""}
               onRequireSignIn={() =>
-                navigate(ROUTES.signIn, { state: { from: window.location.pathname } })
+                navigate(ROUTES.signIn, {
+                  state: { from: window.location.pathname },
+                })
               }
             />
           )}

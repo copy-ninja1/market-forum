@@ -20,7 +20,10 @@ export function AuthLayout() {
         </ParallaxLayer>
         <div className="absolute inset-0 bg-gradient-to-t from-campus-ink via-campus-ink/55 to-campus-ink/20" />
         <div className="relative flex h-full flex-col justify-between p-10 text-campus-paper">
-          <Link to={ROUTES.home} className="focus-ring flex w-fit items-center gap-2.5 rounded-md">
+          <Link
+            to={ROUTES.home}
+            className=" flex w-fit items-center gap-2.5 rounded-md"
+          >
             <BrandMark className="bg-campus-paper text-campus-ink" />
             <span className="font-display text-xl">{APP_NAME}</span>
           </Link>
@@ -32,8 +35,8 @@ export function AuthLayout() {
               A clearer way to pass things on.
             </p>
             <p className="mt-4 text-sm leading-relaxed text-white/80">
-              Post a listing with a price, a photo, and the contact method you want people to use.
-              Buyers reach you directly.
+              Post a listing with a price, a photo, and the contact method you
+              want people to use. Buyers reach you directly.
             </p>
           </div>
         </div>
@@ -42,7 +45,7 @@ export function AuthLayout() {
       <div className="flex flex-col justify-center px-5 py-10 md:px-12">
         <Link
           to={ROUTES.home}
-          className="focus-ring mb-8 flex w-fit items-center gap-2.5 text-campus-ink lg:hidden"
+          className=" mb-8 flex w-fit items-center gap-2.5 text-campus-ink lg:hidden"
         >
           <BrandMark />
           <span className="font-display text-xl">{APP_NAME}</span>
