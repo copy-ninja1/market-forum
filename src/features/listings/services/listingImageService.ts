@@ -9,6 +9,7 @@ import type { ListingImage } from "@/features/listings/types/listing.interfaces"
 import { MAX_LISTING_IMAGES } from "@/constants/app.constants";
 import { getFirebaseStorage, listingImagePath } from "@/lib/firebase/firebaseStorage";
 import { validateImageFile } from "@/utils/file.utils";
+import { isPreparedListingImage, prepareListingImage } from "@/utils/image.utils";
 
 export type ListingImageUploadProgress = {
   readonly fileIndex: number;
@@ -21,7 +22,11 @@ function sanitizeFileName(fileName: string): string {
 }
 
 function buildAltText(fileName: string, index: number): string {
-  const base = fileName.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
+  const base = fileName
+    .replace(/\.smf\.webp$/i, "")
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .trim();
   return base.length > 0 ? base : `Listing image ${index + 1}`;
 }
 
@@ -32,19 +37,23 @@ async function uploadSingleImage(
   fileIndex: number,
   onProgress?: (progress: ListingImageUploadProgress) => void,
 ): Promise<ListingImage> {
-  const validation = validateImageFile(file);
+  const prepared = isPreparedListingImage(file) ? file : await prepareListingImage(file);
+  const validation = validateImageFile(prepared);
   if (!validation.ok) {
     throw new Error(validation.message);
+  }
+  if (prepared.type !== "image/webp") {
+    throw new Error("Photos must be converted to WebP before upload.");
   }
 
   const storagePath = listingImagePath(
     ownerUid,
     listingId,
-    `${Date.now()}-${fileIndex}-${sanitizeFileName(file.name)}`,
+    `${Date.now()}-${fileIndex}-${sanitizeFileName(prepared.name)}`,
   );
   const storageRef = ref(getFirebaseStorage(), storagePath);
-  const uploadTask = uploadBytesResumable(storageRef, file, {
-    contentType: file.type,
+  const uploadTask = uploadBytesResumable(storageRef, prepared, {
+    contentType: prepared.type,
   });
 
   await new Promise<void>((resolve, reject) => {
@@ -57,7 +66,7 @@ async function uploadSingleImage(
             : 0;
         onProgress?.({
           fileIndex,
-          fileName: file.name,
+          fileName: prepared.name,
           percent,
         });
       },
@@ -74,7 +83,7 @@ async function uploadSingleImage(
   return {
     url,
     storagePath,
-    altText: buildAltText(file.name, fileIndex),
+    altText: buildAltText(prepared.name, fileIndex),
   };
 }
 

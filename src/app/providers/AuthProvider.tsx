@@ -25,6 +25,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setProfile(nextProfile);
   }, [user]);
 
+  const refreshUser = useCallback(async () => {
+    const firebaseUser = getFirebaseAuth().currentUser;
+    if (!firebaseUser) {
+      setUser(null);
+      setProfile(null);
+      return;
+    }
+
+    await firebaseUser.reload();
+    const authUser = await authService.mapUser(firebaseUser);
+    setUser(authUser);
+  }, []);
+
   const signOut = useCallback(async () => {
     await authService.signOut();
   }, []);
@@ -64,9 +77,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isAuthenticated: user !== null,
       isAdmin: user?.isAdmin ?? false,
       refreshProfile,
+      refreshUser,
       signOut,
     }),
-    [user, profile, isLoading, refreshProfile, signOut],
+    [user, profile, isLoading, refreshProfile, refreshUser, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

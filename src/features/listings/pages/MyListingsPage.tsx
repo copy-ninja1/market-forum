@@ -5,7 +5,8 @@ import { FormError } from "@/components/feedback/FormError";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
-import { editListingPath, listingDetailsPath, ROUTES } from "@/constants/route.constants";
+import { editListingPath, listingDetailsPath, memberPath, ROUTES } from "@/constants/route.constants";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { DeleteListingDialog } from "@/features/listings/components/DeleteListingDialog";
 import { ListingStatusBadge } from "@/features/listings/components/ListingStatusBadge";
 import { LoadingState } from "@/components/ui/LoadingState";
@@ -20,6 +21,7 @@ import { getErrorMessage } from "@/utils/error.utils";
 import { OWNER_EDITABLE_STATUSES, STATUS_LABELS } from "@/constants/listing.constants";
 
 export function MyListingsPage() {
+  const { user } = useAuth();
   const { listings, isLoading, error, reload } = useMyListings();
   const { appName, siteUrl } = useSiteSeoConfig();
   const [deleteTarget, setDeleteTarget] = useState<Listing | null>(null);
@@ -47,9 +49,16 @@ export function MyListingsPage() {
       <DocumentHead seo={myListingsPageSeo(siteUrl, appName)} />
       <PageHeader
         actions={
-          <Link to={ROUTES.createListing}>
-            <Button variant="primary">New listing</Button>
-          </Link>
+          <>
+            {user ? (
+              <Link to={memberPath(user.uid)}>
+                <Button variant="secondary">Public page</Button>
+              </Link>
+            ) : null}
+            <Link to={ROUTES.createListing}>
+              <Button variant="primary">New listing</Button>
+            </Link>
+          </>
         }
         description="Update availability, edit details, or remove posts you no longer need."
         eyebrow="Seller desk"

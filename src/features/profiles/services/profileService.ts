@@ -2,6 +2,8 @@ import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firest
 import { Timestamp } from "firebase/firestore";
 import { updateProfileSchema } from "@/features/profiles/schemas/profileSchemas";
 import type { AuthUser, UserProfile } from "@/features/auth/types/auth.interfaces";
+import type { PublicProfile } from "@/features/profiles/types/profile.interfaces";
+import { toPublicProfile } from "@/features/profiles/lib/publicProfile";
 import type { AccountStatus } from "@/features/auth/types/auth.types";
 import type { ContactType } from "@/features/listings/types/listing.types";
 import { COLLECTIONS, getFirebaseFirestore } from "@/lib/firebase/firebaseFirestore";
@@ -77,6 +79,14 @@ function userDocRef(uid: string) {
   return doc(getFirebaseFirestore(), COLLECTIONS.users, uid);
 }
 
+export async function getPublicProfile(uid: string): Promise<PublicProfile | null> {
+  const profile = await getProfile(uid);
+  if (!profile) {
+    return null;
+  }
+  return toPublicProfile(profile);
+}
+
 export async function getProfile(uid: string): Promise<UserProfile | null> {
   const snapshot = await getDoc(userDocRef(uid));
   if (!snapshot.exists()) {
@@ -145,6 +155,7 @@ export async function ensureProfileExists(user: AuthUser): Promise<UserProfile> 
 
 export const profileService = {
   getProfile,
+  getPublicProfile,
   updateProfile,
   ensureProfileExists,
 };

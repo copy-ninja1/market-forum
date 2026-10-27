@@ -30,6 +30,7 @@ describe("injectSeoIntoHtml", () => {
       categoryName: "Textbooks",
       locationLabel: "North Quad",
       condition: "like-new",
+      ownerUid: "seller-1",
       ownerDisplayName: "Alex",
       imageUrl: "https://cdn.example.edu/book.jpg",
       imageAlt: "Calculus textbook cover",

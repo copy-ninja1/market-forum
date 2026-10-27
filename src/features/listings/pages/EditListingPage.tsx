@@ -11,10 +11,12 @@ import { useCategories } from "@/features/categories/hooks/useCategories";
 import { ListingForm } from "@/features/listings/components/ListingForm";
 import { useListing } from "@/features/listings/hooks/useListing";
 import type { ListingFormSchema } from "@/features/listings/schemas/listingSchemas";
+import type { ListingFormImageSubmission } from "@/features/listings/types/listing.interfaces";
 import { listingImageService } from "@/features/listings/services/listingImageService";
 import { listingService } from "@/features/listings/services/listingService";
 import { DocumentHead, editListingPageSeo, useSiteSeoConfig } from "@/seo";
 import { getErrorMessage } from "@/utils/error.utils";
+import { listingImageCountError } from "@/utils/image.utils";
 
 export function EditListingPage() {
   const { listingId } = useParams<{ listingId: string }>();
@@ -68,23 +70,32 @@ export function EditListingPage() {
     return <Navigate replace to={listingDetailsPath(listing.id)} />;
   }
 
-  const handleSubmit = async (values: ListingFormSchema, newImageFiles: readonly File[]) => {
+  const handleSubmit = async (values: ListingFormSchema, images: ListingFormImageSubmission) => {
     setIsSubmitting(true);
     try {
-      let images = listing.images;
-      if (newImageFiles.length > 0) {
-        const uploaded = await listingImageService.uploadListingImages(
-          user.uid,
-          listing.id,
-          newImageFiles,
-        );
-        images = [...listing.images, ...uploaded];
+      const uploaded =
+        images.newFiles.length > 0
+          ? await listingImageService.uploadListingImages(user.uid, listing.id, images.newFiles)
+          : [];
+      const nextImages = [...images.retainedImages, ...uploaded];
+      const imageError = listingImageCountError(nextImages.length);
+      if (imageError) {
+        throw new Error(imageError);
       }
 
       await listingService.updateListing(listing.id, {
         ...values,
-        images,
+        images: nextImages,
       });
+
+      const retainedPaths = new Set(images.retainedImages.map((image) => image.storagePath));
+      const removedPaths = listing.images
+        .filter((image) => !retainedPaths.has(image.storagePath))
+        .map((image) => image.storagePath);
+      if (removedPaths.length > 0) {
+        await listingImageService.deleteImagesByPaths(removedPaths);
+      }
+
       navigate(listingDetailsPath(listing.id));
     } catch (cause) {
       throw new Error(getErrorMessage(cause, "Could not update listing."));

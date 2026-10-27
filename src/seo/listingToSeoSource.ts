@@ -13,6 +13,7 @@ export function listingToSeoSource(listing: Listing): PublicListingSeoSource {
     categoryName: listing.categoryName,
     locationLabel: listing.locationLabel,
     condition: listing.condition,
+    ownerUid: listing.ownerUid,
     ownerDisplayName: listing.ownerDisplayName,
     imageUrl: primaryImage?.url ?? null,
     imageAlt: primaryImage?.altText ?? listing.title,

@@ -92,6 +92,10 @@
         "function": "ssrPublic"
       },
       {
+        "source": "/members/**",
+        "function": "ssrPublic"
+      },
+      {
         "source": "/auth/**",
         "function": "ssrPublic"
       },

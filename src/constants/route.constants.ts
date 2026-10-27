@@ -8,7 +8,9 @@ export const ROUTES = {
   signIn: "/auth/sign-in",
   signUp: "/auth/sign-up",
   passwordReset: "/auth/password-reset",
+  authAction: "/auth/action",
   profile: "/profile",
+  member: "/members/:uid",
   adminReports: "/admin/reports",
   adminCategories: "/admin/categories",
   forbidden: "/forbidden",
@@ -21,4 +23,8 @@ export function listingDetailsPath(listingId: string): string {
 
 export function editListingPath(listingId: string): string {
   return `/listings/${listingId}/edit`;
+}
+
+export function memberPath(uid: string): string {
+  return `/members/${encodeURIComponent(uid)}`;
 }

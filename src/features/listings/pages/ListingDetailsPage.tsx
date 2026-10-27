@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { CONDITION_LABELS } from "@/constants/listing.constants";
-import { editListingPath, ROUTES } from "@/constants/route.constants";
+import { editListingPath, memberPath, ROUTES } from "@/constants/route.constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ListingImageGallery } from "@/features/listings/components/ListingImageGallery";
 import { ListingStatusBadge } from "@/features/listings/components/ListingStatusBadge";
@@ -97,7 +97,12 @@ export function ListingDetailsPage() {
           </p>
           <p className="text-sm text-campus-ink/65">
             Posted {formatRelativeDate(listing.createdAt)} by{" "}
-            {listing.ownerDisplayName}
+            <Link
+              className="font-semibold text-campus-ink underline-offset-4 hover:underline"
+              to={memberPath(listing.ownerUid)}
+            >
+              {listing.ownerDisplayName}
+            </Link>
           </p>
 
           <dl className="grid grid-cols-2 gap-4 rounded-3xl bg-white p-5 text-sm">

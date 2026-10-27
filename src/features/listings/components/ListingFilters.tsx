@@ -17,12 +17,15 @@ export function ListingFilters({
   sort,
   categories,
   isCategoriesLoading = false,
+  layout = "grid",
   onCategoryChange,
   onAvailabilityChange,
   onSortChange,
 }: ListingFiltersProps) {
+  const layoutClass = layout === "stack" ? "grid gap-4" : "grid gap-4 md:grid-cols-3";
+
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className={layoutClass}>
       <Select
         fullWidth
         isDisabled={isCategoriesLoading}

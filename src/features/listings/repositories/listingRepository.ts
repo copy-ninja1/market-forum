@@ -88,6 +88,19 @@ class ListingRepository implements ListingRepositoryContract {
     );
   }
 
+  async getActiveByOwner(ownerUid: string): Promise<readonly Listing[]> {
+    const listingsQuery = query(
+      this.collectionRef(),
+      where("ownerUid", "==", ownerUid),
+      where("status", "==", "active"),
+      orderBy("createdAt", "desc"),
+    );
+    const snapshot = await getDocs(listingsQuery);
+    return snapshot.docs
+      .map((document) => mapListingFromFirestore(document.id, document.data()))
+      .filter((listing) => listing.status === "active");
+  }
+
   async getPublicListings(options: ListingQueryOptions): Promise<{
     readonly items: readonly Listing[];
     readonly nextCursor: string | null;

@@ -1,6 +1,9 @@
+import { Button } from "@heroui/react";
+import { Link } from "react-router-dom";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { memberPath } from "@/constants/route.constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ProfileForm } from "@/features/profiles/components/ProfileForm";
 import { profileService } from "@/features/profiles/services/profileService";
@@ -45,7 +48,12 @@ export function ProfilePage() {
     <div className="space-y-8">
       <DocumentHead seo={seo} />
       <PageHeader
-        description="Your display name and contact method are what other students see on a listing."
+        actions={
+          <Link to={memberPath(profile.uid)}>
+            <Button variant="secondary">Public page</Button>
+          </Link>
+        }
+        description="Your display name and institution appear on your public page, with your current listings. Contact details stay on each listing you publish."
         eyebrow="Account"
         title="Your profile"
       />

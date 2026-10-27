@@ -27,10 +27,10 @@ Admin privileges are **not** stored here. They use Auth custom claims.
 | title / description | string | Validated lengths |
 | categoryId / categoryName | string | Name denormalized for read convenience |
 | price | number | >= 0 |
-| currencyCode | string | ISO-like 3-letter code |
+| currencyCode | string | `NGN` for new and edited listings |
 | condition | new \| like-new \| good \| fair | |
 | locationLabel | string | Campus location text |
-| images | array | `{ url, storagePath, altText }` max 5 |
+| images | array | `{ url, storagePath, altText }`, 1 or 2 WebP photos |
 | contactType / contactValue | intentionally public contact | Shown on detail page |
 | status | active \| sold \| unavailable \| hidden | Hidden excluded from public browse |
 | searchKeywords | string[] | Token/prefix index for MVP search |

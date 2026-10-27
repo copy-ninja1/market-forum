@@ -6,9 +6,12 @@ export {
   browsePageSeo,
   listingPageSeo,
   listingNotFoundSeo,
+  memberPageSeo,
+  memberNotFoundSeo,
   signInPageSeo,
   signUpPageSeo,
   passwordResetPageSeo,
+  authActionPageSeo,
   createListingPageSeo,
   editListingPageSeo,
   myListingsPageSeo,
@@ -23,6 +26,7 @@ export { getPublicSiteUrl } from "@/seo/siteUrl";
 export type {
   PageSeoInput,
   PublicListingSeoSource,
+  PublicMemberSeoSource,
   ResolvedPageSeo,
   RobotsDirective,
 } from "@/seo/seo.types";

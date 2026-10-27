@@ -1,5 +1,5 @@
 import { escapeHtml, truncatePlainText } from "@/seo/escapeHtml";
-import type { PublicListingSeoSource } from "@/seo/seo.types";
+import type { PublicListingSeoSource, PublicMemberSeoSource } from "@/seo/seo.types";
 
 export function buildHomeSsrHtml(appName: string): string {
   return `
@@ -43,9 +43,26 @@ export function buildListingSsrHtml(listing: PublicListingSeoSource): string {
   ${image}
   <h1 itemprop="name">${escapeHtml(listing.title)}</h1>
   <p><strong itemprop="offers" itemscope itemtype="https://schema.org/Offer"><span itemprop="price">${escapeHtml(price)}</span></strong> · ${escapeHtml(listing.condition)} · ${escapeHtml(listing.locationLabel)}</p>
-  <p>Posted by ${escapeHtml(listing.ownerDisplayName)}</p>
+  <p>Posted by ${
+    listing.ownerUid
+      ? `<a href="/members/${escapeHtml(encodeURIComponent(listing.ownerUid))}">${escapeHtml(listing.ownerDisplayName)}</a>`
+      : escapeHtml(listing.ownerDisplayName)
+  }</p>
   <p itemprop="description">${escapeHtml(truncatePlainText(listing.description, 500))}</p>
   <p><a href="/browse">See more listings</a></p>
+</article>`.trim();
+}
+
+export function buildMemberSsrHtml(member: PublicMemberSeoSource): string {
+  const institution = member.institution.trim();
+  return `
+<article class="seo-ssr">
+  <nav aria-label="Breadcrumb">
+    <a href="/browse">Listings</a> / <span>${escapeHtml(member.displayName)}</span>
+  </nav>
+  <h1>${escapeHtml(member.displayName)}</h1>
+  <p>${escapeHtml(institution || "Campus member")}</p>
+  <p>Current public listings from this member.</p>
 </article>`.trim();
 }
 

@@ -1,4 +1,4 @@
-import { listingFormSchema } from "@/features/listings/schemas/listingSchemas";
+import { listingFormSchema, listingUpdateSchema } from "@/features/listings/schemas/listingSchemas";
 import { listingRepository } from "@/features/listings/repositories/listingRepository";
 import { categoryRepository } from "@/features/categories/repositories/categoryRepository";
 import type {
@@ -57,7 +57,7 @@ export async function updateListing(
   listingId: string,
   input: unknown,
 ): Promise<Listing> {
-  const parsed = listingFormSchema.partial().parse(input);
+  const parsed = listingUpdateSchema.parse(input);
   const updateInput: UpdateListingInput = {
     ...(parsed.title !== undefined ? { title: parsed.title } : {}),
     ...(parsed.description !== undefined ? { description: parsed.description } : {}),
@@ -69,6 +69,7 @@ export async function updateListing(
     ...(parsed.contactType !== undefined ? { contactType: parsed.contactType } : {}),
     ...(parsed.contactValue !== undefined ? { contactValue: parsed.contactValue } : {}),
     ...(parsed.status !== undefined ? { status: parsed.status } : {}),
+    ...(parsed.images !== undefined ? { images: parsed.images } : {}),
   };
 
   let categoryName: string | undefined;
@@ -111,6 +112,10 @@ export async function listMine(ownerUid: string): Promise<readonly Listing[]> {
   return listingRepository.getByOwner(ownerUid);
 }
 
+export async function listActiveByOwner(ownerUid: string): Promise<readonly Listing[]> {
+  return listingRepository.getActiveByOwner(ownerUid);
+}
+
 export const listingService = {
   createListing,
   updateListing,
@@ -119,4 +124,5 @@ export const listingService = {
   getListing,
   listPublic,
   listMine,
+  listActiveByOwner,
 };

@@ -2,17 +2,29 @@ import { Button } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ErrorState } from "@/components/ui/ErrorState";
-import { MARKET_IMAGES } from "@/constants/marketing.constants";
+import { SORT_LABELS } from "@/constants/listing.constants";
 import { ROUTES } from "@/constants/route.constants";
 import { useCategories } from "@/features/categories/hooks/useCategories";
+import { ListingCatalog } from "@/features/listings/components/ListingCatalog";
 import { ListingFilters } from "@/features/listings/components/ListingFilters";
-import { ListingGrid } from "@/features/listings/components/ListingGrid";
 import { ListingSearch } from "@/features/listings/components/ListingSearch";
 import { useListings } from "@/features/listings/hooks/useListings";
 import type { ListingFilters as ListingFiltersState } from "@/features/listings/types/listing.interfaces";
 import type { ListingAvailabilityFilter, ListingSortOption } from "@/features/listings/types/listing.types";
 import { useDebounce } from "@/hooks/useDebounce";
 import { browsePageSeo, DocumentHead, useSiteSeoConfig } from "@/seo";
+
+const AVAILABILITY_LABELS: Record<ListingAvailabilityFilter, string> = {
+  active: "Available",
+  sold: "Sold",
+  unavailable: "Unavailable",
+  all: "All public",
+};
+
+function formatResultCount(count: number, hasMore: boolean): string {
+  const noun = count === 1 ? "listing" : "listings";
+  return hasMore ? `Showing ${count} ${noun}` : `${count} ${noun}`;
+}
 
 export function BrowseListingsPage() {
   const [searchParams] = useSearchParams();
@@ -37,116 +49,129 @@ export function BrowseListingsPage() {
 
   const { listings, hasMore, isLoading, isLoadingMore, error, loadMore, reload } = useListings(filters);
 
+  const selectedCategory = categories.find((category) => category.id === categoryId);
+  const hasCustomFilters =
+    searchTerm.trim().length > 0 ||
+    categoryId.length > 0 ||
+    availability !== "active" ||
+    sort !== "newest";
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setCategoryId("");
+    setAvailability("active");
+    setSort("newest");
+  };
+
+  const resultLabel = isLoading
+    ? "Loading the catalog…"
+    : formatResultCount(listings.length, hasMore);
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <DocumentHead seo={browsePageSeo(siteUrl, appName, debouncedSearch || undefined)} />
-      <section className="relative overflow-hidden rounded-[2rem] bg-campus-ink text-campus-paper">
-        <img
-          alt=""
-          className="absolute inset-0 size-full object-cover opacity-40"
-          height={640}
-          src={MARKET_IMAGES.desk}
-          width={1600}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-campus-ink via-campus-ink/80 to-campus-ink/35" />
-        <div className="relative flex flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between md:px-10 md:py-14">
-          <div className="max-w-xl">
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-white/70">
-              Marketplace
-            </p>
-            <h1 className="font-display mt-2 text-4xl tracking-tight md:text-6xl">
-              Browse listings
-            </h1>
-            <p className="mt-3 text-sm leading-relaxed text-white/80 md:text-base">
-              Textbooks, furniture, electronics, and the rest of campus — posted
-              by people here.
-            </p>
-          </div>
-          <Link to={ROUTES.createListing}>
-            <Button className="bg-white text-campus-ink" variant="secondary">
-              Post a listing
-            </Button>
-          </Link>
-        </div>
-      </section>
 
-      <div className="panel space-y-5 p-4 md:p-6">
-        <ListingSearch
-          placeholder="Search by title…"
-          value={searchTerm}
-          onChange={setSearchTerm}
-        />
-        {categories.length > 0 ? (
-          <div
-            className="flex gap-2 overflow-x-auto pb-1"
-            role="group"
-            aria-label="Categories"
-          >
-            <button
-              className={` shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
-                categoryId === ""
-                  ? "bg-campus-ink text-campus-paper"
-                  : "bg-campus-mist/70 text-campus-ink"
-              }`}
-              type="button"
-              onClick={() => setCategoryId("")}
-            >
-              All
-            </button>
-            {categories.map((category) => (
+      <header className="flex flex-col gap-5 border-b border-campus-ink/10 pb-6 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-campus-ink/50">
+            Catalog
+          </p>
+          <h1 className="font-display mt-2 text-4xl tracking-tight text-campus-ink md:text-5xl">
+            Listings
+          </h1>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-campus-ink/70 md:text-base">
+            Search active campus listings, narrow by category and availability, and open a record for price, condition, and seller contact.
+          </p>
+        </div>
+        <Link to={ROUTES.createListing}>
+          <Button variant="primary">Post a listing</Button>
+        </Link>
+      </header>
+
+      <div className="grid items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="rounded-xl border border-campus-ink/10 bg-white p-4 lg:sticky lg:top-28">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h2 className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-campus-ink/50">
+              Refine
+            </h2>
+            {hasCustomFilters ? (
               <button
-                key={category.id}
-                aria-pressed={categoryId === category.id}
-                className={` shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold ${
-                  categoryId === category.id
-                    ? "bg-campus-ink text-campus-paper"
-                    : "bg-campus-mist/70 text-campus-ink"
-                }`}
+                className="text-sm font-semibold text-campus-ink underline-offset-4 hover:underline"
                 type="button"
-                onClick={() => setCategoryId(category.id)}
+                onClick={resetFilters}
               >
-                {category.name}
+                Clear
               </button>
-            ))}
+            ) : null}
           </div>
-        ) : null}
-        <ListingFilters
-          availability={availability}
-          categories={categories}
-          categoryId={categoryId}
-          isCategoriesLoading={isCategoriesLoading}
-          sort={sort}
-          onAvailabilityChange={setAvailability}
-          onCategoryChange={setCategoryId}
-          onSortChange={setSort}
-        />
+          <div className="space-y-4">
+            <ListingSearch
+              placeholder="Search by title…"
+              value={searchTerm}
+              onChange={setSearchTerm}
+            />
+            <ListingFilters
+              availability={availability}
+              categories={categories}
+              categoryId={categoryId}
+              isCategoriesLoading={isCategoriesLoading}
+              layout="stack"
+              sort={sort}
+              onAvailabilityChange={setAvailability}
+              onCategoryChange={setCategoryId}
+              onSortChange={setSort}
+            />
+          </div>
+        </aside>
+
+        <section aria-label="Listing results" className="space-y-4">
+          <div className="flex flex-col gap-2 rounded-xl border border-campus-ink/10 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <p aria-live="polite" className="text-sm font-semibold text-campus-ink">
+              {resultLabel}
+            </p>
+            <p className="text-sm text-campus-ink/60">
+              {AVAILABILITY_LABELS[availability]}
+              {" · "}
+              {selectedCategory?.name ?? "All categories"}
+              {" · "}
+              {SORT_LABELS[sort]}
+            </p>
+          </div>
+
+          {categoriesError ? (
+            <ErrorState
+              message={categoriesError}
+              retryLabel="Retry categories"
+              onRetry={() => window.location.reload()}
+            />
+          ) : null}
+
+          {error ? <ErrorState message={error} onRetry={() => void reload()} /> : null}
+
+          <ListingCatalog
+            emptyDescription={
+              hasCustomFilters
+                ? "No listings match these filters. Clear them or try another search."
+                : "Active listings will appear here as members post them."
+            }
+            emptyTitle={hasCustomFilters ? "No matching listings" : "No listings yet"}
+            isLoading={isLoading}
+            listings={listings}
+          />
+
+          {hasMore ? (
+            <div className="flex justify-center pt-1">
+              <Button
+                isDisabled={isLoadingMore}
+                variant="secondary"
+                onPress={() => void loadMore()}
+              >
+                {isLoadingMore ? "Loading…" : "Load more"}
+              </Button>
+            </div>
+          ) : null}
+        </section>
       </div>
-
-      {categoriesError ? (
-        <ErrorState
-          message={categoriesError}
-          retryLabel="Retry categories"
-          onRetry={() => window.location.reload()}
-        />
-      ) : null}
-
-      {error ? (
-        <ErrorState message={error} onRetry={() => void reload()} />
-      ) : null}
-
-      <ListingGrid isLoading={isLoading} listings={listings} />
-
-      {hasMore ? (
-        <div className="flex justify-center pt-2">
-          <Button
-            isDisabled={isLoadingMore}
-            variant="secondary"
-            onPress={() => void loadMore()}
-          >
-            {isLoadingMore ? "Loading…" : "Load more"}
-          </Button>
-        </div>
-      ) : null}
     </div>
   );
 }

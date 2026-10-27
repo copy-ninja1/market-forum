@@ -9,6 +9,23 @@
 5. Enable **Storage**.
 6. Optionally enable **App Check** for production clients after validating the integration.
 
+## 1b. Custom email action handler (required)
+
+Verification and password-reset emails must open the in-app page at `/auth/action`, not Firebase’s hosted “email verified” screen.
+
+1. Set `VITE_PUBLIC_SITE_URL` to your production origin (no trailing slash).
+2. In **Authentication → Settings → Authorized domains**, add that host.
+3. In **Authentication → Templates**, open **Email address verification** and **Password reset**.
+4. Choose **Customize action URL** and set it to:
+
+```text
+https://YOUR_SITE_ORIGIN/auth/action
+```
+
+Example: `https://your-project-id.web.app/auth/action`
+
+The app also passes this URL as `continueUrl` when sending verification and reset emails. Without the console Action URL change, Firebase still shows its default completion UI first.
+
 ## 2. Environment variables
 
 Copy `.env.example` to `.env.local` and set:

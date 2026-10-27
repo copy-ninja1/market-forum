@@ -1,5 +1,5 @@
 import { absoluteUrl, normalizeSiteUrl } from "@/seo/absoluteUrl";
-import type { PublicListingSeoSource } from "@/seo/seo.types";
+import type { PublicListingSeoSource, PublicMemberSeoSource } from "@/seo/seo.types";
 
 export function buildWebsiteJsonLd(siteUrl: string, appName: string): Record<string, unknown> {
   const origin = normalizeSiteUrl(siteUrl);
@@ -49,6 +49,32 @@ export function buildBreadcrumbJsonLd(
   };
 }
 
+export function buildMemberProfileJsonLd(
+  siteUrl: string,
+  member: PublicMemberSeoSource,
+): Record<string, unknown> {
+  const path = `/members/${encodeURIComponent(member.uid)}`;
+  const institution = member.institution.trim();
+  const person: Record<string, unknown> = {
+    "@type": "Person",
+    name: member.displayName,
+    url: absoluteUrl(path, siteUrl),
+  };
+
+  if (institution) {
+    person.affiliation = {
+      "@type": "Organization",
+      name: institution,
+    };
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    mainEntity: person,
+  };
+}
+
 export function buildListingProductJsonLd(
   siteUrl: string,
   listing: PublicListingSeoSource,
@@ -70,8 +96,11 @@ export function buildListingProductJsonLd(
     sku: listing.id,
     url: absoluteUrl(`/listings/${listing.id}`, origin),
     brand: {
-      "@type": "Organization",
+      "@type": "Person",
       name: listing.ownerDisplayName,
+      ...(listing.ownerUid
+        ? { url: absoluteUrl(`/members/${encodeURIComponent(listing.ownerUid)}`, origin) }
+        : {}),
     },
     offers: {
       "@type": "Offer",
@@ -83,6 +112,9 @@ export function buildListingProductJsonLd(
       seller: {
         "@type": "Person",
         name: listing.ownerDisplayName,
+        ...(listing.ownerUid
+          ? { url: absoluteUrl(`/members/${encodeURIComponent(listing.ownerUid)}`, origin) }
+          : {}),
       },
     },
   };

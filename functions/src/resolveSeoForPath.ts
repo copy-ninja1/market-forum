@@ -6,9 +6,12 @@ import {
   homePageSeo,
   listingNotFoundSeo,
   listingPageSeo,
+  memberNotFoundSeo,
+  memberPageSeo,
   myListingsPageSeo,
   notFoundPageSeo,
   passwordResetPageSeo,
+  authActionPageSeo,
   profilePageSeo,
   signInPageSeo,
   signUpPageSeo,
@@ -16,6 +19,7 @@ import {
 } from "@/seo/pageSeo";
 import type { ResolvedPageSeo } from "@/seo/seo.types";
 import { fetchPublicListing } from "./lib/fetchPublicListing";
+import { fetchPublicMember } from "./lib/fetchPublicMember";
 
 export async function resolveSeoForPath(
   pathname: string,
@@ -45,6 +49,9 @@ export async function resolveSeoForPath(
   }
   if (path === "/auth/password-reset") {
     return { seo: passwordResetPageSeo(siteUrl, appName), status: 200 };
+  }
+  if (path === "/auth/action") {
+    return { seo: authActionPageSeo(siteUrl, appName), status: 200 };
   }
 
   if (path === "/listings/new") {
@@ -92,6 +99,22 @@ export async function resolveSeoForPath(
       return { seo: listingNotFoundSeo(siteUrl, appName), status: 404 };
     }
     return { seo: listingPageSeo(siteUrl, appName, listing), status: 200 };
+  }
+
+  const memberMatch = /^\/members\/([^/]+)$/.exec(path);
+  if (memberMatch?.[1]) {
+    let uid = memberMatch[1];
+    try {
+      uid = decodeURIComponent(uid);
+    } catch {
+      return { seo: memberNotFoundSeo(siteUrl, appName), status: 404 };
+    }
+
+    const member = await fetchPublicMember(uid);
+    if (!member) {
+      return { seo: memberNotFoundSeo(siteUrl, appName), status: 404 };
+    }
+    return { seo: memberPageSeo(siteUrl, appName, member), status: 200 };
   }
 
   return { seo: notFoundPageSeo(siteUrl, appName), status: 404 };

@@ -79,12 +79,17 @@ export interface ListingGridProps {
   readonly emptyAction?: ReactNode;
 }
 
+export interface ListingCatalogProps extends ListingGridProps {
+  readonly showSeller?: boolean;
+}
+
 export interface ListingFiltersProps {
   readonly categoryId: string;
   readonly availability: ListingAvailabilityFilter;
   readonly sort: ListingSortOption;
   readonly categories: readonly { id: string; name: string }[];
   readonly isCategoriesLoading?: boolean;
+  readonly layout?: "grid" | "stack";
   readonly onCategoryChange: (categoryId: string) => void;
   readonly onAvailabilityChange: (availability: ListingAvailabilityFilter) => void;
   readonly onSortChange: (sort: ListingSortOption) => void;
@@ -97,6 +102,21 @@ export interface ListingSearchProps {
 }
 
 export type ListingFormMode = "create" | "edit";
+
+export type ListingFormImageSubmission = {
+  readonly newFiles: readonly File[];
+  readonly retainedImages: readonly ListingImage[];
+};
+
+export type ListingDraft = {
+  readonly title: string;
+  readonly description: string;
+  readonly price: number;
+  readonly categoryName: string;
+  readonly condition: ListingCondition;
+  readonly locationLabel: string;
+  readonly photoUrls: readonly string[];
+};
 
 export interface ListingFormProps {
   readonly mode: ListingFormMode;
@@ -120,9 +140,10 @@ export interface ListingFormProps {
   readonly existingImages?: readonly ListingImage[];
   readonly isSubmitting: boolean;
   readonly submitLabel?: string;
+  readonly onDraftChange?: (draft: ListingDraft) => void;
   readonly onSubmit: (
     values: import("@/features/listings/schemas/listingSchemas").ListingFormSchema,
-    newImageFiles: readonly File[],
+    images: ListingFormImageSubmission,
   ) => Promise<void>;
 }
 
@@ -152,6 +173,7 @@ export interface ListingQueryOptions {
 export interface ListingRepositoryContract {
   getById(id: string): Promise<Listing | null>;
   getByOwner(ownerUid: string): Promise<readonly Listing[]>;
+  getActiveByOwner(ownerUid: string): Promise<readonly Listing[]>;
   getPublicListings(options: ListingQueryOptions): Promise<{
     readonly items: readonly Listing[];
     readonly nextCursor: string | null;

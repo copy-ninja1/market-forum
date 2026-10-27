@@ -28,6 +28,12 @@ export type ResolvedPageSeo = {
   readonly ssrHtml: string;
 };
 
+export type PublicMemberSeoSource = {
+  readonly uid: string;
+  readonly displayName: string;
+  readonly institution: string;
+};
+
 export type PublicListingSeoSource = {
   readonly id: string;
   readonly title: string;
@@ -38,6 +44,7 @@ export type PublicListingSeoSource = {
   readonly categoryName: string;
   readonly locationLabel: string;
   readonly condition: string;
+  readonly ownerUid: string;
   readonly ownerDisplayName: string;
   readonly imageUrl: string | null;
   readonly imageAlt: string | null;

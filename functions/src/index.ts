@@ -105,6 +105,17 @@ export const sitemap = onRequest(
       const listings = await listActiveListingSitemapEntries();
       const staticPaths = ["/", "/browse"] as const;
       const lastmod = new Date().toISOString();
+      const memberUpdatedAt = new Map<string, string>();
+
+      for (const listing of listings) {
+        if (!listing.ownerUid) {
+          continue;
+        }
+        const previous = memberUpdatedAt.get(listing.ownerUid);
+        if (!previous || listing.updatedAtIso > previous) {
+          memberUpdatedAt.set(listing.ownerUid, listing.updatedAtIso);
+        }
+      }
 
       const urls = [
         ...staticPaths.map(
@@ -117,6 +128,12 @@ export const sitemap = onRequest(
           (listing) => `  <url>
     <loc>${absoluteUrl(`/listings/${listing.id}`, siteUrl)}</loc>
     <lastmod>${listing.updatedAtIso}</lastmod>
+  </url>`,
+        ),
+        ...[...memberUpdatedAt.entries()].map(
+          ([uid, updatedAtIso]) => `  <url>
+    <loc>${absoluteUrl(`/members/${encodeURIComponent(uid)}`, siteUrl)}</loc>
+    <lastmod>${updatedAtIso}</lastmod>
   </url>`,
         ),
       ];

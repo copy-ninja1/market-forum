@@ -7,6 +7,7 @@ import { ProtectedRoute } from "@/app/ProtectedRoute";
 import { ROUTES } from "@/constants/route.constants";
 import { AdminCategoriesPage, ModerationQueuePage } from "@/features/admin";
 import {
+  AuthActionPage,
   PasswordResetPage,
   SignInPage,
   SignUpPage,
@@ -19,6 +20,7 @@ import {
   MyListingsPage,
 } from "@/features/listings";
 import { ProfilePage } from "@/features/profiles/pages/ProfilePage";
+import { PublicMemberPage } from "@/features/profiles/pages/PublicMemberPage";
 import { ForbiddenPage } from "@/pages/ForbiddenPage";
 import { HomePage } from "@/pages/HomePage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
@@ -41,6 +43,7 @@ export const appRouter = createBrowserRouter([
         ],
       },
       { path: "listings/:listingId", element: <ListingDetailsPage /> },
+      { path: "members/:uid", element: <PublicMemberPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },
@@ -52,6 +55,7 @@ export const appRouter = createBrowserRouter([
       { path: "sign-in", element: <SignInPage /> },
       { path: "sign-up", element: <SignUpPage /> },
       { path: "password-reset", element: <PasswordResetPage /> },
+      { path: "action", element: <AuthActionPage /> },
     ],
   },
   {

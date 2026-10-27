@@ -55,5 +55,6 @@ export interface AuthContextValue {
   readonly isAuthenticated: boolean;
   readonly isAdmin: boolean;
   readonly refreshProfile: () => Promise<void>;
+  readonly refreshUser: () => Promise<void>;
   readonly signOut: () => Promise<void>;
 }

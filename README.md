@@ -5,7 +5,8 @@ A Firebase-powered campus marketplace where students browse listings, publish it
 ## Features
 
 - Browse, search, filter, and sort public listings
-- Email/password authentication with profile management
+- Email/password authentication with branded email verification and password-reset completion
+- Profile management
 - Create, edit, mark sold/unavailable, and delete owned listings
 - Image uploads to Firebase Storage with client validation
 - Listing reports and administrator moderation

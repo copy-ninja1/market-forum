@@ -75,8 +75,52 @@ body {
   outline-offset: 3px;
 }
 
+.auth-action-mark {
+  transform-origin: center;
+  animation: auth-action-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-action-check path {
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: auth-action-draw 520ms 120ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.auth-action-success {
+  animation: auth-action-rise 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes auth-action-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes auth-action-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .auth-action-mark,
+  .auth-action-success,
+  .auth-action-check path {
+    animation: none;
+  }
+
+  .auth-action-check path {
+    stroke-dashoffset: 0;
   }
 }

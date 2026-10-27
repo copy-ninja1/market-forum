@@ -1,6 +1,7 @@
 import {
   buildBreadcrumbJsonLd,
   buildListingProductJsonLd,
+  buildMemberProfileJsonLd,
   buildOrganizationJsonLd,
   buildWebsiteJsonLd,
 } from "@/seo/jsonLd";
@@ -9,10 +10,16 @@ import {
   buildBrowseSsrHtml,
   buildHomeSsrHtml,
   buildListingSsrHtml,
+  buildMemberSsrHtml,
   buildPrivateSsrHtml,
 } from "@/seo/ssrContent";
 import { truncatePlainText } from "@/seo/escapeHtml";
-import type { PageSeoInput, PublicListingSeoSource, ResolvedPageSeo } from "@/seo/seo.types";
+import type {
+  PageSeoInput,
+  PublicListingSeoSource,
+  PublicMemberSeoSource,
+  ResolvedPageSeo,
+} from "@/seo/seo.types";
 
 export function homePageSeo(siteUrl: string, appName: string): ResolvedPageSeo {
   return resolvePageSeo(
@@ -92,6 +99,53 @@ export function listingPageSeo(
   );
 }
 
+export function memberPageSeo(
+  siteUrl: string,
+  appName: string,
+  member: PublicMemberSeoSource,
+): ResolvedPageSeo {
+  const institution = member.institution.trim();
+  const description = institution
+    ? `Public profile for ${member.displayName} at ${institution}. Current listings on ${appName}.`
+    : `Public profile for ${member.displayName}. Current listings on ${appName}.`;
+
+  return resolvePageSeo(
+    {
+      title: member.displayName,
+      description,
+      path: `/members/${encodeURIComponent(member.uid)}`,
+      jsonLd: [
+        buildBreadcrumbJsonLd(siteUrl, [
+          { name: "Home", path: "/" },
+          { name: "Listings", path: "/browse" },
+          {
+            name: member.displayName,
+            path: `/members/${encodeURIComponent(member.uid)}`,
+          },
+        ]),
+        buildMemberProfileJsonLd(siteUrl, member),
+      ],
+      ssrHtml: buildMemberSsrHtml(member),
+    },
+    siteUrl,
+    appName,
+  );
+}
+
+export function memberNotFoundSeo(siteUrl: string, appName: string): ResolvedPageSeo {
+  return resolvePageSeo(
+    {
+      title: "Member not found",
+      description: `This member page is unavailable on ${appName}.`,
+      path: "/browse",
+      robots: "noindex,follow",
+      ssrHtml: buildPrivateSsrHtml("Member not found"),
+    },
+    siteUrl,
+    appName,
+  );
+}
+
 export function listingNotFoundSeo(siteUrl: string, appName: string): ResolvedPageSeo {
   return resolvePageSeo(
     {
@@ -151,6 +205,16 @@ export function passwordResetPageSeo(siteUrl: string, appName: string): Resolved
     "Reset password",
     `Reset your ${appName} account password.`,
     "/auth/password-reset",
+    siteUrl,
+    appName,
+  );
+}
+
+export function authActionPageSeo(siteUrl: string, appName: string): ResolvedPageSeo {
+  return privatePage(
+    "Confirm account",
+    `Complete an email confirmation for your ${appName} account.`,
+    "/auth/action",
     siteUrl,
     appName,
   );
