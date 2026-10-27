@@ -46,6 +46,8 @@ export interface UpdateProfileInput {
   readonly avatarUrl?: string | null;
 }
 
+export type AuthFieldErrors = Record<string, string>;
+
 export interface AuthContextValue {
   readonly user: AuthUser | null;
   readonly profile: UserProfile | null;

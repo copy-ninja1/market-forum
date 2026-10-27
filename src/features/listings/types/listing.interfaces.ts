@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type {
   ContactType,
   ListingAvailabilityFilter,
@@ -68,6 +69,78 @@ export interface ListingFilters {
 
 export interface ListingCardProps {
   readonly listing: Listing;
+}
+
+export interface ListingGridProps {
+  readonly listings: readonly Listing[];
+  readonly isLoading?: boolean;
+  readonly emptyTitle?: string;
+  readonly emptyDescription?: string;
+  readonly emptyAction?: ReactNode;
+}
+
+export interface ListingFiltersProps {
+  readonly categoryId: string;
+  readonly availability: ListingAvailabilityFilter;
+  readonly sort: ListingSortOption;
+  readonly categories: readonly { id: string; name: string }[];
+  readonly isCategoriesLoading?: boolean;
+  readonly onCategoryChange: (categoryId: string) => void;
+  readonly onAvailabilityChange: (availability: ListingAvailabilityFilter) => void;
+  readonly onSortChange: (sort: ListingSortOption) => void;
+}
+
+export interface ListingSearchProps {
+  readonly value: string;
+  readonly onChange: (value: string) => void;
+  readonly placeholder?: string;
+}
+
+export type ListingFormMode = "create" | "edit";
+
+export interface ListingFormProps {
+  readonly mode: ListingFormMode;
+  readonly categories: readonly { id: string; name: string }[];
+  readonly isCategoriesLoading?: boolean;
+  readonly initialValues?: Partial<
+    Pick<
+      Listing,
+      | "title"
+      | "description"
+      | "categoryId"
+      | "price"
+      | "currencyCode"
+      | "condition"
+      | "locationLabel"
+      | "contactType"
+      | "contactValue"
+      | "status"
+    >
+  >;
+  readonly existingImages?: readonly ListingImage[];
+  readonly isSubmitting: boolean;
+  readonly submitLabel?: string;
+  readonly onSubmit: (
+    values: import("@/features/listings/schemas/listingSchemas").ListingFormSchema,
+    newImageFiles: readonly File[],
+  ) => Promise<void>;
+}
+
+export interface ListingImageGalleryProps {
+  readonly images: readonly ListingImage[];
+  readonly title: string;
+}
+
+export interface ListingStatusBadgeProps {
+  readonly status: ListingStatus;
+  readonly className?: string;
+}
+
+export interface DeleteListingDialogProps {
+  readonly listing: Listing;
+  readonly isOpen: boolean;
+  readonly onOpenChange: (open: boolean) => void;
+  readonly onDeleted: () => void;
 }
 
 export interface ListingQueryOptions {

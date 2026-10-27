@@ -68,7 +68,15 @@ export async function moderateReport(
   return moderated;
 }
 
+export async function listOpenReports(moderator: AuthUser): Promise<readonly Report[]> {
+  if (!moderator.isAdmin) {
+    throw new Error("You do not have permission to view the moderation queue.");
+  }
+  return reportRepository.getOpenReports();
+}
+
 export const reportService = {
   createReport,
   moderateReport,
+  listOpenReports,
 };

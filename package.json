@@ -1,13 +1,20 @@
 {
-  "name": "MARKET_FORUM",
+  "name": "student-market-forum",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "oxlint src",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:security": "vitest run --config vitest.security.config.ts",
+    "emulators": "firebase emulators:start --only auth,firestore,storage",
+    "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
+    "seed:categories": "tsx scripts/seed-categories.ts"
   },
   "dependencies": {
     "@heroui/react": "^3.2.6",
