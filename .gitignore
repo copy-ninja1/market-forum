@@ -11,6 +11,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+functions/lib
+functions/hosting
 *.local
 .env
 .env.local

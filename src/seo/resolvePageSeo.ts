@@ -1,4 +1,4 @@
-import { absoluteUrl, normalizeSiteUrl } from "@/seo/siteUrl";
+import { absoluteUrl, normalizeSiteUrl } from "@/seo/absoluteUrl";
 import type { PageSeoInput, ResolvedPageSeo } from "@/seo/seo.types";
 
 const DEFAULT_OG_PATH = "/logo.png";

@@ -1,5 +1,6 @@
 import { render, type RenderOptions } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { MemoryRouter } from "react-router-dom";
 
 type WrapperProps = {
@@ -7,7 +8,11 @@ type WrapperProps = {
 };
 
 function AllProviders({ children }: WrapperProps) {
-  return <MemoryRouter>{children}</MemoryRouter>;
+  return (
+    <HelmetProvider>
+      <MemoryRouter>{children}</MemoryRouter>
+    </HelmetProvider>
+  );
 }
 
 export function renderWithProviders(ui: ReactElement, options?: Omit<RenderOptions, "wrapper">) {

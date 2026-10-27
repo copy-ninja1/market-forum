@@ -28,9 +28,8 @@ export function DocumentHead({ seo }: DocumentHeadProps) {
           // Stable per-page schemas; index is safe because the array is page-owned and ordered.
           key={`jsonld-${index}`}
           type="application/ld+json"
-        >
-          {JSON.stringify(node)}
-        </script>
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(node) }}
+        />
       ))}
     </Helmet>
   );

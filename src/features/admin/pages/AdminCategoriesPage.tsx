@@ -8,6 +8,7 @@ import { LoadingState } from "@/components/ui/LoadingState";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { categoryService } from "@/features/categories/services/categoryService";
 import type { Category } from "@/features/categories/types/category.interfaces";
+import { adminPageSeo, DocumentHead, useSiteSeoConfig } from "@/seo";
 import { getErrorMessage } from "@/utils/error.utils";
 
 function slugify(value: string): string {
@@ -19,6 +20,8 @@ function slugify(value: string): string {
 }
 
 export function AdminCategoriesPage() {
+  const { appName, siteUrl } = useSiteSeoConfig();
+  const seo = adminPageSeo(siteUrl, appName, "/admin/categories", "Categories");
   const [categories, setCategories] = useState<readonly Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -94,15 +97,26 @@ export function AdminCategoriesPage() {
   };
 
   if (isLoading) {
-    return <LoadingState message="Loading categories…" />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <LoadingState message="Loading categories…" />
+      </>
+    );
   }
 
   if (loadError) {
-    return <ErrorState message={loadError} onRetry={() => void load()} />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <ErrorState message={loadError} onRetry={() => void load()} />
+      </>
+    );
   }
 
   return (
     <div className="space-y-8">
+      <DocumentHead seo={seo} />
       <PageHeader
         description="Categories power the browse filters. Only administrators can add them."
         eyebrow="Catalog"

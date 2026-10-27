@@ -5,16 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && pnpm --dir functions build && node scripts/copy-ssr-shell.mjs",
+    "build:web": "tsc -b && vite build",
+    "build:functions": "pnpm --dir functions build",
     "preview": "vite preview",
-    "lint": "oxlint src",
+    "lint": "oxlint src functions/src",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:security": "vitest run --config vitest.security.config.ts",
     "emulators": "firebase emulators:start --only auth,firestore,storage",
+    "emulators:ssr": "firebase emulators:start --only auth,firestore,storage,functions,hosting",
     "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
-    "seed:categories": "tsx scripts/seed-categories.ts"
+    "seed:categories": "tsx scripts/seed-categories.ts",
+    "deploy": "pnpm build && firebase deploy --only hosting,functions"
   },
   "dependencies": {
     "@heroui/react": "^3.2.6",

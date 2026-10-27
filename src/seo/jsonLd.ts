@@ -1,4 +1,4 @@
-import { absoluteUrl, normalizeSiteUrl } from "@/seo/siteUrl";
+import { absoluteUrl, normalizeSiteUrl } from "@/seo/absoluteUrl";
 import type { PublicListingSeoSource } from "@/seo/seo.types";
 
 export function buildWebsiteJsonLd(siteUrl: string, appName: string): Record<string, unknown> {

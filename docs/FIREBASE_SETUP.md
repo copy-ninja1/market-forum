@@ -30,14 +30,31 @@ firebase use <project-id>
 firebase deploy --only firestore:rules,firestore:indexes,storage
 ```
 
-## 4. Hosting
+## 4. Hosting + SSR Functions
 
 ```bash
+pnpm install
+pnpm --dir functions install
 pnpm build
-firebase deploy --only hosting
+firebase deploy --only hosting,functions
 ```
 
-`firebase.json` rewrites all routes to `index.html` for the SPA.
+Or use `pnpm deploy`.
+
+Public marketplace routes rewrite to the `ssrPublic` Cloud Function, which injects SEO tags and crawler HTML into the built `index.html` shell. `/sitemap.xml` is served by the `sitemap` function from active Firestore listings. Remaining SPA routes still fall through to `index.html`.
+
+Set production site origin:
+
+```env
+# .env.local (client)
+VITE_PUBLIC_SITE_URL=https://your-project-id.web.app
+```
+
+```bash
+# Cloud Functions runtime config / secrets as preferred for your project
+firebase functions:secrets:set PUBLIC_SITE_URL
+# or set PUBLIC_SITE_URL / VITE_PUBLIC_SITE_URL in the Functions environment
+```
 
 ## 5. Emulators
 

@@ -18,7 +18,8 @@ export {
   notFoundPageSeo,
 } from "@/seo/pageSeo";
 export { useSiteSeoConfig } from "@/seo/useSiteSeoConfig";
-export { getPublicSiteUrl, absoluteUrl, normalizeSiteUrl } from "@/seo/siteUrl";
+export { absoluteUrl, normalizeSiteUrl } from "@/seo/absoluteUrl";
+export { getPublicSiteUrl } from "@/seo/siteUrl";
 export type {
   PageSeoInput,
   PublicListingSeoSource,

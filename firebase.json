@@ -8,6 +8,22 @@
   "storage": {
     "rules": "storage.rules"
   },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
   "hosting": {
     "public": "dist",
     "ignore": [
@@ -42,9 +58,46 @@
             "value": "no-cache"
           }
         ]
+      },
+      {
+        "source": "/robots.txt",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
       }
     ],
     "rewrites": [
+      {
+        "source": "/sitemap.xml",
+        "function": "sitemap"
+      },
+      {
+        "source": "/",
+        "function": "ssrPublic"
+      },
+      {
+        "source": "/browse",
+        "function": "ssrPublic"
+      },
+      {
+        "source": "/browse/**",
+        "function": "ssrPublic"
+      },
+      {
+        "source": "/listings/**",
+        "function": "ssrPublic"
+      },
+      {
+        "source": "/auth/**",
+        "function": "ssrPublic"
+      },
+      {
+        "source": "/forbidden",
+        "function": "ssrPublic"
+      },
       {
         "source": "**",
         "destination": "/index.html"
@@ -60,6 +113,12 @@
     },
     "storage": {
       "port": 9199
+    },
+    "functions": {
+      "port": 5001
+    },
+    "hosting": {
+      "port": 5000
     },
     "ui": {
       "enabled": true,

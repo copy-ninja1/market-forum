@@ -9,7 +9,6 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import type {
   Category,
@@ -78,15 +77,13 @@ class CategoryRepository {
   }
 
   async getActiveCategories(): Promise<readonly Category[]> {
-    const categoriesQuery = query(
-      this.collectionRef(),
-      where("isActive", "==", true),
-      orderBy("sortOrder", "asc"),
-    );
+    // Categories are a small admin-managed set. Order server-side and
+    // filter active client-side so browse works without a composite index.
+    const categoriesQuery = query(this.collectionRef(), orderBy("sortOrder", "asc"));
     const snapshot = await getDocs(categoriesQuery);
-    return snapshot.docs.map((document) =>
-      mapCategoryFromFirestore(document.id, document.data()),
-    );
+    return snapshot.docs
+      .map((document) => mapCategoryFromFirestore(document.id, document.data()))
+      .filter((category) => category.isActive);
   }
 
   async getById(id: string): Promise<Category | null> {

@@ -1,8 +1,6 @@
-const TRAILING_SLASH = /\/$/;
+import { normalizeSiteUrl } from "@/seo/absoluteUrl";
 
-export function normalizeSiteUrl(siteUrl: string): string {
-  return siteUrl.trim().replace(TRAILING_SLASH, "");
-}
+export { absoluteUrl, normalizeSiteUrl } from "@/seo/absoluteUrl";
 
 /**
  * Absolute public origin used for canonical URLs, Open Graph, and sitemaps.
@@ -19,12 +17,4 @@ export function getPublicSiteUrl(): string {
   }
 
   return "http://localhost:5173";
-}
-
-export function absoluteUrl(path: string, siteUrl = getPublicSiteUrl()): string {
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return `${normalizeSiteUrl(siteUrl)}${normalizedPath}`;
 }

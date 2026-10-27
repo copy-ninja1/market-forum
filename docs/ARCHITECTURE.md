@@ -14,9 +14,19 @@ src/
     reports/           # listing reports
     admin/             # moderation queue + category admin UI
   lib/firebase/        # Firebase app/Auth/Firestore/Storage
+  seo/                 # page meta, JSON-LD, SSR HTML inject helpers
   pages/               # home, 404, forbidden
   constants/, types/, utils/, hooks/, styles/, test/
+functions/
+  src/                 # ssrPublic + sitemap Cloud Functions (bundles src/seo)
 ```
+
+## SSR and SEO
+
+- Client navigations update `<head>` via `react-helmet-async` (`DocumentHead`).
+- First HTML for public routes is produced by `ssrPublic`, which loads the Vite shell from `functions/hosting/index.html` and injects meta, canonical, Open Graph, JSON-LD, and `#seo-ssr` crawler markup.
+- After hydration, `SeoSsrCleanup` removes `#seo-ssr`.
+- Auth, profile, my-listings, and admin pages use `noindex` and are excluded from `robots.txt` / the sitemap.
 
 ## Boundaries
 
