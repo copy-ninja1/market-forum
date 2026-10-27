@@ -10,6 +10,7 @@ import {
 } from "@/constants/marketing.constants";
 import { ROUTES } from "@/constants/route.constants";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { DocumentHead, homePageSeo, useSiteSeoConfig } from "@/seo";
 
 const STEPS = [
   {
@@ -32,6 +33,7 @@ const STEPS = [
 export function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { appName, siteUrl } = useSiteSeoConfig();
   const [query, setQuery] = useState("");
   const postTarget = isAuthenticated ? ROUTES.createListing : ROUTES.signIn;
 
@@ -43,6 +45,7 @@ export function HomePage() {
 
   return (
     <div>
+      <DocumentHead seo={homePageSeo(siteUrl, appName)} />
       <section className="relative isolate min-h-[92vh] overflow-hidden bg-campus-ink text-campus-paper">
         <ParallaxLayer className="absolute -inset-y-40 inset-x-0" speed={0.16}>
           <img

@@ -10,6 +10,13 @@ import { ListingImageGallery } from "@/features/listings/components/ListingImage
 import { ListingStatusBadge } from "@/features/listings/components/ListingStatusBadge";
 import { useListing } from "@/features/listings/hooks/useListing";
 import { ReportListingForm } from "@/features/reports/components/ReportListingForm";
+import {
+  DocumentHead,
+  listingNotFoundSeo,
+  listingPageSeo,
+  useSiteSeoConfig,
+} from "@/seo";
+import { listingToSeoSource } from "@/seo/listingToSeoSource";
 import { formatMoney } from "@/utils/currency.utils";
 import { formatRelativeDate } from "@/utils/date.utils";
 
@@ -17,6 +24,7 @@ export function ListingDetailsPage() {
   const { listingId } = useParams<{ listingId: string }>();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+  const { appName, siteUrl } = useSiteSeoConfig();
   const { listing, isLoading, error, notFound, reload } = useListing(listingId);
 
   if (isLoading) {
@@ -29,15 +37,18 @@ export function ListingDetailsPage() {
 
   if (notFound || !listing) {
     return (
-      <EmptyState
-        action={
-          <Link to={ROUTES.browse}>
-            <Button variant="primary">Back to browse</Button>
-          </Link>
-        }
-        description="This listing may have been removed or the link is incorrect."
-        title="Listing not found"
-      />
+      <>
+        <DocumentHead seo={listingNotFoundSeo(siteUrl, appName)} />
+        <EmptyState
+          action={
+            <Link to={ROUTES.browse}>
+              <Button variant="primary">Back to browse</Button>
+            </Link>
+          }
+          description="This listing may have been removed or the link is incorrect."
+          title="Listing not found"
+        />
+      </>
     );
   }
 
@@ -57,6 +68,7 @@ export function ListingDetailsPage() {
 
   return (
     <div className="space-y-10">
+      <DocumentHead seo={listingPageSeo(siteUrl, appName, listingToSeoSource(listing))} />
       <nav aria-label="Breadcrumb" className="text-sm text-campus-ink/60">
         <Link className=" rounded-sm hover:text-campus-ink" to={ROUTES.browse}>
           Browse

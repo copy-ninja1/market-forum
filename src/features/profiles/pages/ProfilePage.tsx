@@ -5,21 +5,32 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ProfileForm } from "@/features/profiles/components/ProfileForm";
 import { profileService } from "@/features/profiles/services/profileService";
 import type { UpdateProfileSchema } from "@/features/profiles/schemas/profileSchemas";
+import { DocumentHead, profilePageSeo, useSiteSeoConfig } from "@/seo";
 import { formatRelativeDate } from "@/utils/date.utils";
 
 export function ProfilePage() {
   const { profile, isLoading, refreshProfile } = useAuth();
+  const { appName, siteUrl } = useSiteSeoConfig();
+  const seo = profilePageSeo(siteUrl, appName);
 
   if (isLoading) {
-    return <LoadingState message="Loading profile…" />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <LoadingState message="Loading profile…" />
+      </>
+    );
   }
 
   if (!profile) {
     return (
-      <ErrorState
-        message="We could not load your profile. Try signing out and back in."
-        title="Profile unavailable"
-      />
+      <>
+        <DocumentHead seo={seo} />
+        <ErrorState
+          message="We could not load your profile. Try signing out and back in."
+          title="Profile unavailable"
+        />
+      </>
     );
   }
 
@@ -32,6 +43,7 @@ export function ProfilePage() {
 
   return (
     <div className="space-y-8">
+      <DocumentHead seo={seo} />
       <PageHeader
         description="Your display name and contact method are what other students see on a listing."
         eyebrow="Account"

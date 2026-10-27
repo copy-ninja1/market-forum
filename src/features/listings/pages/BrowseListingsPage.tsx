@@ -12,9 +12,11 @@ import { useListings } from "@/features/listings/hooks/useListings";
 import type { ListingFilters as ListingFiltersState } from "@/features/listings/types/listing.interfaces";
 import type { ListingAvailabilityFilter, ListingSortOption } from "@/features/listings/types/listing.types";
 import { useDebounce } from "@/hooks/useDebounce";
+import { browsePageSeo, DocumentHead, useSiteSeoConfig } from "@/seo";
 
 export function BrowseListingsPage() {
   const [searchParams] = useSearchParams();
+  const { appName, siteUrl } = useSiteSeoConfig();
   const [searchTerm, setSearchTerm] = useState(() => searchParams.get("q") ?? "");
   const [categoryId, setCategoryId] = useState("");
   const [availability, setAvailability] = useState<ListingAvailabilityFilter>("active");
@@ -37,6 +39,7 @@ export function BrowseListingsPage() {
 
   return (
     <div className="space-y-8">
+      <DocumentHead seo={browsePageSeo(siteUrl, appName, debouncedSearch || undefined)} />
       <section className="relative overflow-hidden rounded-[2rem] bg-campus-ink text-campus-paper">
         <img
           alt=""

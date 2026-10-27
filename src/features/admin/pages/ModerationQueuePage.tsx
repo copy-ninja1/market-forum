@@ -6,23 +6,37 @@ import { StatCard } from "@/components/ui/StatCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ReportQueueItem } from "@/features/admin/components/ReportQueueItem";
 import { useModerationQueue } from "@/features/admin/hooks/useModerationQueue";
+import { adminPageSeo, DocumentHead, useSiteSeoConfig } from "@/seo";
 
 export function ModerationQueuePage() {
   const { reports, listingMeta, isLoading, error, moderatingReportId, reload, moderate } =
     useModerationQueue();
+  const { appName, siteUrl } = useSiteSeoConfig();
+  const seo = adminPageSeo(siteUrl, appName, "/admin/reports", "Moderation queue");
 
   if (isLoading) {
-    return <LoadingState message="Loading reports…" />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <LoadingState message="Loading reports…" />
+      </>
+    );
   }
 
   if (error) {
-    return <ErrorState message={error} onRetry={() => void reload()} />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <ErrorState message={error} onRetry={() => void reload()} />
+      </>
+    );
   }
 
   const openCount = reports.filter((report) => report.status === "open" || report.status === "reviewing").length;
 
   return (
     <div className="space-y-8">
+      <DocumentHead seo={seo} />
       <PageHeader
         actions={
           <Button variant="secondary" onPress={() => void reload()}>

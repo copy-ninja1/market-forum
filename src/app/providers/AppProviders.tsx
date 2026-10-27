@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/app/providers/AuthProvider";
 import { HeroUIProvider } from "@/app/providers/HeroUIProvider";
+import { SeoSsrCleanup } from "@/seo/SeoSsrCleanup";
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -8,8 +10,13 @@ type AppProvidersProps = {
 
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <HeroUIProvider>
-      <AuthProvider>{children}</AuthProvider>
-    </HeroUIProvider>
+    <HelmetProvider>
+      <HeroUIProvider>
+        <AuthProvider>
+          <SeoSsrCleanup />
+          {children}
+        </AuthProvider>
+      </HeroUIProvider>
+    </HelmetProvider>
   );
 }

@@ -1,10 +1,13 @@
 import { Button } from "@heroui/react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/constants/route.constants";
+import { DocumentHead, forbiddenPageSeo, useSiteSeoConfig } from "@/seo";
 
 export function ForbiddenPage() {
+  const { appName, siteUrl } = useSiteSeoConfig();
   return (
     <section className="panel mx-auto max-w-2xl px-6 py-14 text-center md:px-12">
+      <DocumentHead seo={forbiddenPageSeo(siteUrl, appName)} />
       <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-campus-leaf">
         Restricted
       </p>

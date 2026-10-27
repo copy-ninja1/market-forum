@@ -13,34 +13,50 @@ import { useListing } from "@/features/listings/hooks/useListing";
 import type { ListingFormSchema } from "@/features/listings/schemas/listingSchemas";
 import { listingImageService } from "@/features/listings/services/listingImageService";
 import { listingService } from "@/features/listings/services/listingService";
+import { DocumentHead, editListingPageSeo, useSiteSeoConfig } from "@/seo";
 import { getErrorMessage } from "@/utils/error.utils";
 
 export function EditListingPage() {
   const { listingId } = useParams<{ listingId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { appName, siteUrl } = useSiteSeoConfig();
   const { listing, isLoading, error, notFound, reload } = useListing(listingId);
   const { categories, isLoading: isCategoriesLoading } = useCategories();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const seo = editListingPageSeo(siteUrl, appName, listingId ?? "unknown");
 
   if (isLoading) {
-    return <LoadingState message="Loading listing…" />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <LoadingState message="Loading listing…" />
+      </>
+    );
   }
 
   if (error) {
-    return <ErrorState message={error} onRetry={() => void reload()} />;
+    return (
+      <>
+        <DocumentHead seo={seo} />
+        <ErrorState message={error} onRetry={() => void reload()} />
+      </>
+    );
   }
 
   if (notFound || !listing) {
     return (
-      <EmptyState
-        action={
-          <Link to={ROUTES.myListings}>
-            <Button variant="primary">My listings</Button>
-          </Link>
-        }
-        title="Listing not found"
-      />
+      <>
+        <DocumentHead seo={seo} />
+        <EmptyState
+          action={
+            <Link to={ROUTES.myListings}>
+              <Button variant="primary">My listings</Button>
+            </Link>
+          }
+          title="Listing not found"
+        />
+      </>
     );
   }
 
@@ -79,6 +95,7 @@ export function EditListingPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
+      <DocumentHead seo={seo} />
       <PageHeader
         description="Update details, photos, or the contact method buyers will see."
         eyebrow="Your listing"

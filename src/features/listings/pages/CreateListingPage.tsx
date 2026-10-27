@@ -9,11 +9,13 @@ import { ListingForm } from "@/features/listings/components/ListingForm";
 import type { ListingFormSchema } from "@/features/listings/schemas/listingSchemas";
 import { listingImageService } from "@/features/listings/services/listingImageService";
 import { listingService } from "@/features/listings/services/listingService";
+import { createListingPageSeo, DocumentHead, useSiteSeoConfig } from "@/seo";
 import { getErrorMessage } from "@/utils/error.utils";
 
 export function CreateListingPage() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
+  const { appName, siteUrl } = useSiteSeoConfig();
   const { categories, isLoading: isCategoriesLoading } = useCategories();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -50,6 +52,7 @@ export function CreateListingPage() {
 
   return (
     <div className="space-y-8">
+      <DocumentHead seo={createListingPageSeo(siteUrl, appName)} />
       <PageHeader
         description="Share a clear title, price, photo, and the contact method you want buyers to use."
         eyebrow="New listing"

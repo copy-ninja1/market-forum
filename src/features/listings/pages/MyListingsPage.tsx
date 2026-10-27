@@ -14,12 +14,14 @@ import { useMyListings } from "@/features/listings/hooks/useMyListings";
 import type { Listing } from "@/features/listings/types/listing.interfaces";
 import { listingService } from "@/features/listings/services/listingService";
 import type { ListingStatus } from "@/features/listings/types/listing.types";
+import { DocumentHead, myListingsPageSeo, useSiteSeoConfig } from "@/seo";
 import { formatMoney } from "@/utils/currency.utils";
 import { getErrorMessage } from "@/utils/error.utils";
 import { OWNER_EDITABLE_STATUSES, STATUS_LABELS } from "@/constants/listing.constants";
 
 export function MyListingsPage() {
   const { listings, isLoading, error, reload } = useMyListings();
+  const { appName, siteUrl } = useSiteSeoConfig();
   const [deleteTarget, setDeleteTarget] = useState<Listing | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -42,6 +44,7 @@ export function MyListingsPage() {
 
   return (
     <div className="space-y-8">
+      <DocumentHead seo={myListingsPageSeo(siteUrl, appName)} />
       <PageHeader
         actions={
           <Link to={ROUTES.createListing}>

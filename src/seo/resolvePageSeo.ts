@@ -1,7 +1,7 @@
 import { absoluteUrl, normalizeSiteUrl } from "@/seo/siteUrl";
 import type { PageSeoInput, ResolvedPageSeo } from "@/seo/seo.types";
 
-const DEFAULT_OG_PATH = "/og-default.png";
+const DEFAULT_OG_PATH = "/logo.png";
 
 export function resolvePageSeo(
   input: PageSeoInput,
