@@ -79,7 +79,7 @@ describe("ListingForm", () => {
     const file = new File([new Uint8Array(20)], "lamp.jpg", { type: "image/jpeg" });
     await user.upload(screen.getByLabelText(/Add photo/i), file);
 
-    expect(await screen.findByText("WebP · 1 KB")).toBeInTheDocument();
+    expect(await screen.findByText("WebP · 180 B")).toBeInTheDocument();
     expect(screen.getByText("1/2")).toBeInTheDocument();
   });
 });

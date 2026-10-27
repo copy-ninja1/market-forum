@@ -60,7 +60,7 @@ export function ListingPhotoPicker({
           {total}/{MAX_LISTING_IMAGES}
         </p>
       </div>
-      <p className="max-w-prose text-sm leading-relaxed text-campus-ink/75">
+      <p className="max-w-prose text-sm leading-relaxed text-campus-ink">
         Add {MIN_LISTING_IMAGES} or {MAX_LISTING_IMAGES} photos. They are resized and saved as WebP
         before upload, and cropped to this tall frame in browse.
       </p>
